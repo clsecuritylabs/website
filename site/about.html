@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | Closed Loop Security Labs</title>
+  <meta name="description" content="About Closed Loop Security Labs LLC - AI security research on sovereign infrastructure."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="assets/logo.png" type="image/png"/>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="assets/logo.png" alt="CLS Labs"/> CLS LABS
+    </a>
+    <button class="nav-toggle">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="clap.html">CLAP Protocol</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <span class="section-label">About</span>
+    <h1>Closed Loop Security Labs</h1>
+    <p>AI security research and services, powered by sovereign infrastructure.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <h2 style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 1.5rem;">Built by a Security Engineer</h2>
+        <p style="color: var(--text-secondary); line-height: 1.9; margin-bottom: 1.5rem;">Closed Loop Security Labs was founded by Brandon, a security engineer transitioning into AI security with deep experience in enterprise infrastructure, zero-trust architectures, and adversarial testing methodologies.</p>
+        <p style="color: var(--text-secondary); line-height: 1.9; margin-bottom: 1.5rem;">Prior to founding CLS Labs, Brandon served on Verizon's Executive Shadow Board, mentoring C-suite executives on generative AI strategy and security implications. That experience revealed a critical gap: organizations deploying AI at scale have no standardized way to verify that their security controls actually work.</p>
+        <p style="color: var(--text-secondary); line-height: 1.9;">CLS Labs exists to close that gap &mdash; literally. The closed loop is the product: attack, verify, remediate, prove.</p>
+
+        <h3 style="font-family: var(--font-display); margin-top: 2rem; margin-bottom: 0.75rem;">Certifications</h3>
+        <ul class="cert-list">
+          <li>CompTIA Security+</li>
+          <li>CompTIA Network+</li>
+          <li>CompTIA A+</li>
+          <li>CompTIA SecAI+ (2026)</li>
+          <li>CompTIA CySA+ (Planned)</li>
+        </ul>
+      </div>
+
+      <div class="reveal">
+        <h3 style="font-family: var(--font-display); margin-bottom: 1rem;">The Sovereign AI Factory</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">All research runs on privately-owned infrastructure. No cloud dependencies for core operations. No third-party data exposure.</p>
+        <div class="rig-spec">
+          <span class="label">Compute:</span> <span class="value">6&times; NVIDIA RTX 3060 12GB (~56GB VRAM)</span><br/>
+          <span class="label">Inference:</span> <span class="value">vLLM + Triton + LiteLLM Gateway</span><br/>
+          <span class="label">Orchestration:</span> <span class="value">Kubernetes (k3s) + Cilium CNI</span><br/>
+          <span class="label">Identity:</span> <span class="value">SPIFFE/SPIRE + LDAP/AD</span><br/>
+          <span class="label">Monitoring:</span> <span class="value">Prometheus + Grafana + Wazuh SIEM</span><br/>
+          <span class="label">Networking:</span> <span class="value">pfSense + Zero-Trust + Hubble</span><br/>
+          <span class="label">Models:</span> <span class="value">70B (6-GPU tensor parallel), 7-14B (1-2 GPU)</span><br/>
+          <span class="label">Policy:</span> <span class="value">Triple-Lineage Rule (no shared DNA in validation)</span>
+        </div>
+
+        <h3 style="font-family: var(--font-display); margin-top: 2rem; margin-bottom: 1rem;">Contact</h3>
+        <p style="color: var(--text-secondary);">
+          <strong>Email:</strong> <a href="mailto:brandon@clsecuritylabs.com">brandon@clsecuritylabs.com</a><br/>
+          <strong>Web:</strong> clsecuritylabs.com<br/>
+          <strong>GitHub:</strong> <a href="https://github.com/clsecuritylabs" target="_blank">github.com/clsecuritylabs</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-text">&copy; 2026 Closed Loop Security Labs LLC. All rights reserved.</span>
+      <ul class="footer-links">
+        <li><a href="mailto:brandon@clsecuritylabs.com">Contact</a></li>
+        <li><a href="https://github.com/clsecuritylabs" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

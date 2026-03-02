@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CLAP Protocol | Closed Loop Security Labs</title>
+  <meta name="description" content="Closed Loop Adapter Protocol - a four-layer trust framework for AI security."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="assets/logo.png" type="image/png"/>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="assets/logo.png" alt="CLS Labs"/> CLS LABS
+    </a>
+    <button class="nav-toggle">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="clap.html">CLAP Protocol</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <span class="section-label">Open Protocol</span>
+    <h1>The CLAP Protocol</h1>
+    <p>Closed Loop Adapter Protocol &mdash; a four-layer trust framework for AI security assessment and remediation.</p>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Four Layers</h2>
+      <p class="section-desc">CLAP defines what must be verified, not how. Any conforming implementation is CLAP-compliant.</p>
+    </div>
+
+    <div class="layer-grid">
+      <div class="layer-card reveal">
+        <div class="layer-number">01</div>
+        <h3 style="color: var(--red);">Adapters</h3>
+        <p>How tools connect. Standardized interfaces for attack tools (Garak, PyRIT), defense tools (NeMo Guardrails, LLM Guard), and analyzers (OWASP, MITRE ATLAS). Write a CLAP adapter in under 100 lines.</p>
+      </div>
+      <div class="layer-card reveal">
+        <div class="layer-number">02</div>
+        <h3 style="color: var(--purple);">Verification</h3>
+        <p>The trust layer. Every result passes through deduplication, breach classification, statistical verification (N&ge;3), semantic validation by LLM judge, and false positive checking. This is what makes CLAP more than a tool connector.</p>
+      </div>
+      <div class="layer-card reveal">
+        <div class="layer-number">03</div>
+        <h3 style="color: var(--blue);">Orchestration</h3>
+        <p>How the loop runs. Recon &rarr; attack &rarr; verify &rarr; remediate &rarr; deploy &rarr; re-verify &rarr; iterate. Confidence-based deployment: &ge;0.90 auto-deploy, 0.70&ndash;0.90 monitored, &lt;0.70 human-in-the-loop.</p>
+      </div>
+      <div class="layer-card reveal">
+        <div class="layer-number">04</div>
+        <h3 style="color: #22C55E;">Certification</h3>
+        <p>How patterns get published. Certified Remediation Patterns (CRPs) carry full verification provenance. CRP-2026-0147 means: this attack was reproduced, this defense blocks it, here's the proof.</p>
+      </div>
+    </div>
+
+    <hr class="gradient-divider reveal"/>
+
+    <div class="reveal" style="max-width: 800px; margin: 3rem auto;">
+      <h3 style="font-family: var(--font-display); margin-bottom: 1.5rem; text-align: center;">CRP Schema</h3>
+      <div class="code-block">
+<span class="comment"># Certified Remediation Pattern</span>
+<span class="keyword">crp_id:</span> <span class="string">CRP-2026-0147</span>
+<span class="keyword">attack:</span>
+  <span class="keyword">class:</span> <span class="string">phrasing.PastTense</span>
+  <span class="keyword">reproduction_rate:</span> <span class="string">0.95</span>
+  <span class="keyword">models_tested:</span> <span class="string">[llama-3.3-70b, phi-4-14b]</span>
+<span class="keyword">defense:</span>
+  <span class="keyword">tier:</span> <span class="string">2 (distilled classifier)</span>
+  <span class="keyword">verified_block_rate:</span> <span class="string">0.88</span>
+  <span class="keyword">false_positive_rate:</span> <span class="string">0.02</span>
+<span class="keyword">frameworks:</span>
+  <span class="string">- OWASP LLM09: Misinformation</span>
+  <span class="string">- MITRE ATLAS: AML.T0054</span>
+  <span class="string">- NIST AI RMF: GV-1.2</span>
+      </div>
+    </div>
+
+    <div style="text-align: center;" class="reveal">
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">CLAP specification v1.0 &mdash; Apache 2.0 License</p>
+      <a href="#" class="btn btn-primary">View on GitHub (Coming Soon)</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-text">&copy; 2026 Closed Loop Security Labs LLC. All rights reserved.</span>
+      <ul class="footer-links">
+        <li><a href="mailto:brandon@clsecuritylabs.com">Contact</a></li>
+        <li><a href="https://github.com/clsecuritylabs" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
