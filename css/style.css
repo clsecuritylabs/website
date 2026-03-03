@@ -503,6 +503,7 @@ body::before {
 .tag-red { background: rgba(239, 68, 68, 0.15); color: var(--red); }
 .tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
 .tag-purple { background: rgba(139, 92, 246, 0.15); color: var(--purple); }
+.tag-green { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
 
 /* --- CLAP Protocol Layers --- */
 .layer-grid {
