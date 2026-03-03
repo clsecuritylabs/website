@@ -14,13 +14,14 @@
     <a href="index.html" class="nav-logo">
       <img src="assets/logo.png" alt="CLS Labs"/> CLS LABS
     </a>
-    <button class="nav-toggle">☰</button>
+    <button class="nav-toggle">&#9776;</button>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="research.html">Research</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="clap.html">CLAP Protocol</a></li>
       <li><a href="services.html">Services</a></li>
+      <li><a href="repository.html">Repository</a></li>
       <li><a href="about.html">About</a></li>
     </ul>
   </div>
@@ -38,33 +39,49 @@
   <div class="container">
     <div class="about-grid">
       <div class="reveal">
-        <h2 style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 1.5rem;">Built by a Security Engineer</h2>
-        <p style="color: var(--text-secondary); line-height: 1.9; margin-bottom: 1.5rem;">Closed Loop Security Labs was founded by Brandon, a security engineer transitioning into AI security with deep experience in enterprise infrastructure, zero-trust architectures, and adversarial testing methodologies.</p>
-        <p style="color: var(--text-secondary); line-height: 1.9; margin-bottom: 1.5rem;">Prior to founding CLS Labs, Brandon served on Verizon's Executive Shadow Board, mentoring C-suite executives on generative AI strategy and security implications. That experience revealed a critical gap: organizations deploying AI at scale have no standardized way to verify that their security controls actually work.</p>
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem;">Built by a Security Engineer</h2>
+        <p style="color: var(--text-secondary); line-height: 1.9; margin-bottom: 1.5rem;">Closed Loop Security Labs was founded by Brandon Arbour, a network security engineer transitioning into AI security with deep experience in enterprise infrastructure, zero-trust architectures, and adversarial testing methodologies.</p>
+        <p style="color: var(--text-secondary); line-height: 1.9; margin-bottom: 1.5rem;">Prior to founding CLS Labs, Brandon served on Verizon's Executive Shadow Board, mentoring C-suite executives on generative AI strategy. That experience revealed a critical gap: organizations deploying AI at scale have no standardized way to verify that their security controls actually work.</p>
         <p style="color: var(--text-secondary); line-height: 1.9;">CLS Labs exists to close that gap &mdash; literally. The closed loop is the product: attack, verify, remediate, prove.</p>
 
-        <h3 style="font-family: var(--font-display); margin-top: 2rem; margin-bottom: 0.75rem;">Certifications</h3>
+        <h3 style="font-family: var(--font-display); margin-top: 2rem; font-size: 1.5rem; margin-bottom: 0.75rem;">Certifications</h3>
         <ul class="cert-list">
           <li>CompTIA Security+</li>
-          <li>CompTIA Network+</li>
-          <li>CompTIA A+</li>
+          <li>CompTIA Pentest++</li>
+          <li>CompTIA CASP+</li>
+          <li>CompTIA CySA+</li>
+          <li>Google ACE</>
           <li>CompTIA SecAI+ (2026)</li>
-          <li>CompTIA CySA+ (Planned)</li>
         </ul>
       </div>
 
       <div class="reveal">
-        <h3 style="font-family: var(--font-display); margin-bottom: 1rem;">The Sovereign AI Factory</h3>
+        <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem;">The Sovereign AI Factory</h3>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">CLS Labs operates a privately-owned AI research cluster for sovereign workloads &mdash; no third-party data exposure, no cloud dependencies for sensitive operations. For clients requiring maximum data control, assessments run entirely on-premises. For scale and speed, we also operate across trusted cloud infrastructure with strict data handling policies. Your risk profile determines the deployment model &mdash; not our convenience.</p>
         <div class="rig-spec">
           <span class="label">Compute:</span> <span class="value">6&times; NVIDIA RTX 30-series GPU cluster (~56GB total VRAM)</span><br/>
-          <span class="label">Inference:</span> <span class="value">vLLM + Triton + LiteLLM Gateway</span><br/>
+          <span class="label">Inference:</span> <span class="value">vLLM &bull; Triton &bull; llama.cpp (GGUF) &bull; LiteLLM Gateway</span><br/>
           <span class="label">Orchestration:</span> <span class="value">Kubernetes (k3s) + Cilium CNI</span><br/>
           <span class="label">Identity:</span> <span class="value">SPIFFE/SPIRE + LDAP/AD</span><br/>
           <span class="label">Monitoring:</span> <span class="value">Prometheus + Grafana + Wazuh SIEM</span><br/>
           <span class="label">Networking:</span> <span class="value">pfSense + Zero-Trust + Hubble</span><br/>
+          <span class="label">Security:</span> <span class="value">LLM Guard &bull; Garak &bull; PyRIT</span><br/>
+          <span class="label">Agents:</span> <span class="value">LangGraph + CLAP Orchestration Loop</span><br/>
           <span class="label">Models:</span> <span class="value">70B (6-GPU tensor parallel), 7-14B (1-2 GPU)</span><br/>
+          <span class="label">Formats:</span> <span class="value">SafeTensors (vLLM/Triton) + GGUF (llama.cpp)</span><br/>
           <span class="label">Policy:</span> <span class="value">Triple-Lineage Rule (no shared DNA in validation)</span>
+        </div>
+
+        <h3 style="font-family: var(--font-display); margin-top: 2rem; font-size: 1.5rem; margin-bottom: 1.5rem;">Audit &amp; Compliance Stack</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Every assessment produces a complete chain of evidence from probe to remediation.</p>
+        <div class="rig-spec">
+          <span class="label">Data Store:</span> <span class="value">PostgreSQL + Delta Lake (versioned, append-only)</span><br/>
+          <span class="label">Embeddings:</span> <span class="value">bge-large-en-v1.5 (deduplication + semantic integrity)</span><br/>
+          <span class="label">Logging:</span> <span class="value">Wazuh SIEM &bull; Immutable audit trails</span><br/>
+          <span class="label">Provenance:</span> <span class="value">CLAP Layer 2 verification pipeline (N&ge;3 reproductions)</span><br/>
+          <span class="label">Frameworks:</span> <span class="value">NIST AI RMF &bull; OWASP LLM Top 10 &bull; MITRE ATLAS</span><br/>
+          <span class="label">Guardrails:</span> <span class="value">Six-Gate Integrity Pipeline (source auth &rarr; semantic verify &rarr; VBR &rarr; benign test &rarr; diff review &rarr; canary deploy)</span><br/>
+          <span class="label">Config Mgmt:</span> <span class="value">Signed, versioned, rollback-capable guardrail configs</span>
         </div>
 
         <h3 style="font-family: var(--font-display); margin-top: 2rem; margin-bottom: 1rem;">Contact</h3>
