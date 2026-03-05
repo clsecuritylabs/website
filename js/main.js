@@ -17,14 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
   // Set active nav link
-  const path = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    const href = a.getAttribute('href');
-    if (href === path || (path === '' && href === 'index.html')) {
-      a.classList.add('active');
-    }
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const navLinks = document.querySelectorAll('.nav-links a');
+  navLinks.forEach(function(link) {
+      if (link.getAttribute('href') === currentPage) {
+          link.className = link.className + ' active';
+      }
   });
 
   // Scroll reveal
