@@ -334,6 +334,17 @@ body::before {
   color: white;
   background: #2563eb;
 }
+.btn-gold {
+  background: #FFB300;
+  color: #0D0D1A;
+  box-shadow: 0 4px 20px rgba(255, 179, 0, 0.3);
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(255, 179, 0, 0.3);
+  color: #0D0D1A;
+  background: #FFA000;
+}
 
 .btn-group {
   display: flex;
