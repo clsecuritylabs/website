@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Set active nav link
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const currentPage = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
   const navLinks = document.querySelectorAll('.nav-links a');
   navLinks.forEach(function(link) {
-      if (link.getAttribute('href') === currentPage) {
-          link.className = link.className + ' active';
-      }
+       const href = link.getAttribute('href').replace('.html', '');
+       if (href === currentPage || 
+           (currentPage === '' && href === 'index')) {
+           link.className = link.className + ' active';
+       }
   });
 
   // Scroll reveal
