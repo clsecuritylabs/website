@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CLAP Protocol | Closed Loop Security Labs</title>
-  <meta name="description" content="Closed Loop Adapter Protocol - a four-layer trust framework for AI security."/>
-  <link rel="stylesheet" href="css/style.css?v=5"/>
+  <title>The Closed Loop | Closed Loop Security Labs</title>
+  <meta name="description" content="The Closed Loop — a four-layer trust framework for AI security assessment, powered by the CLAP adapter protocol."/>
+  <link rel="stylesheet" href="css/style.css?v=6"/>
   <link rel="icon" href="assets/logo.png" type="image/png"/>
 </head>
 <body>
@@ -19,7 +19,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="research.html">Research</a></li>
       <li><a href="blog.html">Blog</a></li>
-      <li><a href="clap.html">CLAP Protocol</a></li>
+      <li><a href="clap.html">The Closed Loop</a></li>
       <li><a href="services.html">Services</a></li>
       <li><a href="repository.html">Repository</a></li>
       <li><a href="about.html">About</a></li>
@@ -29,9 +29,9 @@
 
 <div class="page-header">
   <div class="container">
-    <span class="section-label">Open Protocol</span>
-    <h1>The CLAP Protocol</h1>
-    <p>Closed Loop Adapter Protocol &mdash; a four-layer trust framework for AI security assessment and remediation.</p>
+    <span class="section-label">Framework</span>
+    <h1>The Closed Loop</h1>
+    <p>A four-layer trust framework for AI security assessment and remediation, powered by the CLAP adapter protocol.</p>
   </div>
 </div>
 
@@ -39,56 +39,130 @@
   <div class="container">
     <div class="section-header reveal">
       <h2 class="section-title">Four Layers</h2>
-      <p class="section-desc">CLAP defines what must be verified, not how. Any conforming implementation is CLAP-compliant.</p>
+      <p class="section-desc">Attack. Verify. Remediate. Certify. The loop runs until the model is proven safe &mdash; or proven it can&rsquo;t be.</p>
     </div>
 
     <div class="layer-grid">
       <div class="layer-card reveal">
         <div class="layer-number">01</div>
-        <h3 style="color: var(--red);">Adapters</h3>
-        <p>How tools connect. Standardized interfaces for attack tools (Garak, PyRIT), defense tools (NeMo Guardrails, LLM Guard), and analyzers (OWASP, MITRE ATLAS). Write a CLAP adapter in under 100 lines.</p>
+        <h3 style="color: var(--red);">Adapters <span style="font-size:0.7rem; color:var(--text-muted); font-weight:400;">&mdash; CLAP Protocol</span></h3>
+        <p>How tools connect. The CLAP protocol defines standardized interfaces for any red team scanner (Garak, PyRIT, promptfoo, custom), any defense framework (NeMo Guardrails, Llama Guard, custom), and any verification judge (Gemini, Claude, Llama, local). Make your tool interoperable in under 100 lines. <code style="font-size:0.8rem; color:var(--accent-primary);">pip install clap-protocol</code></p>
       </div>
       <div class="layer-card reveal">
         <div class="layer-number">02</div>
         <h3 style="color: var(--purple);">Verification</h3>
-        <p>The trust layer. Every result passes through a proprietary multi-stage verification pipeline including semantic deduplication, breach classification, statistical reproduction, and independent judge evaluation. Nothing reaches Layer 3 or Layer 4 without Layer 2 certification.</p>
+        <p>The trust layer. Every breach observation passes through multi-vendor LLM judge evaluation, semantic deduplication, and statistical reproduction testing. We&rsquo;ve demonstrated that breach rates vary 41.9&ndash;67.1% depending on which vendor&rsquo;s model judges the findings. Nothing reaches Layer 3 or Layer 4 without Layer 2 certification.</p>
       </div>
       <div class="layer-card reveal">
         <div class="layer-number">03</div>
         <h3 style="color: var(--blue);">Orchestration</h3>
-        <p>How the loop runs. Recon &rarr; attack &rarr; verify &rarr; remediate &rarr; deploy &rarr; re-verify &rarr; iterate. Confidence-based deployment: &ge;0.90 auto-deploy, 0.70&ndash;0.90 monitored, &lt;0.70 human-in-the-loop.</p>
+        <p>How the loop runs. Attack &rarr; verify &rarr; reproduce &rarr; remediate &rarr; deploy &rarr; re-verify &rarr; iterate. Each cycle generates structured training data that makes the next cycle smarter. Confidence-based deployment: &ge;0.90 auto-deploy, 0.70&ndash;0.90 monitored, &lt;0.70 human-in-the-loop.</p>
       </div>
       <div class="layer-card reveal">
         <div class="layer-number">04</div>
         <h3 style="color: #22C55E;">Certification</h3>
-        <p>How patterns get published. Certified Remediation Patterns (CRPs) carry full verification provenance. CRP-2026-0147 means: this attack was reproduced, this defense blocks it, here's the proof.</p>
+        <p>How findings become proof. Certified Remediation Patterns (CRPs) carry full verification provenance &mdash; which judges agreed, reproduction rates across temperatures, defense performance per tier, and compliance mappings. CRP-2026-0147 means: this attack was reproduced, this defense blocks it, three vendors confirmed it.</p>
       </div>
     </div>
 
     <hr class="gradient-divider reveal"/>
 
-    <div class="reveal" style="max-width: 800px; margin: 3rem auto;">
-      <h3 style="font-family: var(--font-display); margin-bottom: 1.5rem; text-align: center;">CRP Schema</h3>
-      <div class="code-block">
-<span class="comment"># Certified Remediation Pattern</span>
-<span class="keyword">crp_id:</span> <span class="string">CRP-2026-0147</span>
-<span class="keyword">attack:</span>
-  <span class="keyword">class:</span> <span class="string">phrasing.PastTense</span>
-  <span class="keyword">reproduction_rate:</span> <span class="string">0.95</span>
-  <span class="keyword">models_tested:</span> <span class="string">[llama-3.3-70b, phi-4-14b]</span>
-<span class="keyword">defense:</span>
-  <span class="keyword">tier:</span> <span class="string">2 (distilled classifier)</span>
-  <span class="keyword">verified_block_rate:</span> <span class="string">0.88</span>
-  <span class="keyword">false_positive_rate:</span> <span class="string">0.02</span>
-<span class="keyword">frameworks:</span>
-  <span class="string">- OWASP LLM09: Misinformation</span>
-  <span class="string">- MITRE ATLAS: AML.T0054</span>
-  <span class="string">- NIST AI RMF: GV-1.2</span>
+    <!-- ─── CLAP PROTOCOL ─── -->
+    <div class="section-header reveal" style="margin-top: 3rem;">
+      <h2 class="section-title">The CLAP Protocol</h2>
+      <p class="section-desc">Closed Loop Adapter Protocol &mdash; the open connector standard that powers Layer 1.<br/>Like USB for AI security tools. Your tool speaks CLAP, it works with everything.</p>
+    </div>
+
+    <div class="reveal" style="max-width: 800px; margin: 2rem auto;">
+      <div style="display:flex; gap:2rem; flex-wrap:wrap; margin-bottom:2rem;">
+        <div style="flex:1; min-width:200px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid var(--red);">
+          <h4 style="color:var(--red); margin-bottom:0.5rem;">Attack Adapters</h4>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">Garak, PyRIT, promptfoo, Forge Engine, HiddenLayer, custom scripts &mdash; any tool that generates adversarial prompts.</p>
+        </div>
+        <div style="flex:1; min-width:200px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid var(--purple);">
+          <h4 style="color:var(--purple); margin-bottom:0.5rem;">Judge Adapters</h4>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">Gemini, Claude, Llama, GPT-4, local models &mdash; any LLM that can evaluate whether a response is a genuine breach.</p>
+        </div>
+        <div style="flex:1; min-width:200px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid var(--blue);">
+          <h4 style="color:var(--blue); margin-bottom:0.5rem;">Defense Adapters</h4>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">NeMo Guardrails, Llama Guard, AWS Bedrock Guards, Sovereign Guardrail, custom classifiers &mdash; any defense layer.</p>
+        </div>
       </div>
     </div>
 
-    <div style="text-align: center;" class="reveal">
-      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">CLAP specification v1.0 &mdash; Apache 2.0 License</p>
+    <hr class="gradient-divider reveal"/>
+
+    <!-- ─── CRP SCHEMA ─── -->
+    <div class="reveal" style="max-width: 800px; margin: 3rem auto;">
+      <h3 style="font-family: var(--font-display); margin-bottom: 0.5rem; text-align: center;">Certified Remediation Pattern</h3>
+      <p style="color: var(--text-muted); text-align: center; margin-bottom: 1.5rem; font-size: 0.9rem;">Every CRP carries the full chain of evidence. Reproduced. Defended. Verified by multiple vendors.</p>
+      <div class="code-block">
+<span class="comment"># Certified Remediation Pattern</span>
+<span class="keyword">crp_id:</span> <span class="string">CRP-2026-0147</span>
+<span class="keyword">status:</span> <span class="string">certified</span>
+
+<span class="keyword">target:</span>
+  <span class="keyword">model:</span> <span class="string">meta-llama/Llama-3.3-70B-Instruct-Turbo</span>
+  <span class="keyword">provider:</span> <span class="string">together (dedicated endpoint)</span>
+
+<span class="keyword">attack:</span>
+  <span class="keyword">vector:</span> <span class="string">1.03 &mdash; Virtualization</span>
+  <span class="keyword">category:</span> <span class="string">Direct Prompt Injection</span>
+  <span class="keyword">variants_tested:</span> <span class="string">5</span>
+
+<span class="keyword">verification:</span>
+  <span class="keyword">judges:</span>
+    <span class="string">- Gemini 2.0 Flash (Google): breach, confidence 0.95</span>
+    <span class="string">- Claude Sonnet 4 (Anthropic): breach, confidence 0.91</span>
+    <span class="string">- Llama 4 Maverick (Meta): breach, confidence 0.88</span>
+  <span class="keyword">unanimous:</span> <span class="string">true</span>
+
+<span class="keyword">reproduction:</span>
+  <span class="keyword">attempts:</span> <span class="string">5</span>
+  <span class="keyword">reproduction_rate:</span> <span class="string">0.80</span>
+  <span class="keyword">temperatures:</span> <span class="string">[0.0, 0.7]</span>
+
+<span class="keyword">remediation:</span>
+  <span class="keyword">naked:</span> <span class="string">80% breach rate (no defense)</span>
+  <span class="keyword">tier_1:</span> <span class="string">40% (input normalization)</span>
+  <span class="keyword">tier_2:</span> <span class="string">20% (+ classifier)</span>
+  <span class="keyword">full_stack:</span> <span class="string">0% (all layers active)</span>
+  <span class="keyword">false_positive_rate:</span> <span class="string">0.02</span>
+
+<span class="keyword">compliance:</span>
+  <span class="string">- OWASP LLM01: Prompt Injection</span>
+  <span class="string">- MITRE ATLAS: AML.T0051</span>
+  <span class="string">- NIST AI RMF: MG-2.1, MG-2.2</span>
+  <span class="string">- EU AI Act: Article 9</span>
+      </div>
+    </div>
+
+    <hr class="gradient-divider reveal"/>
+
+    <!-- ─── CONFORMANCE ─── -->
+    <div class="section-header reveal" style="margin-top: 3rem;">
+      <h2 class="section-title">Conformance Levels</h2>
+      <p class="section-desc">CLAP defines what must be verified, not how. Any conforming implementation is CLAP-compliant.</p>
+    </div>
+
+    <div style="display:flex; gap:2rem; flex-wrap:wrap; max-width:900px; margin:2rem auto;" class="reveal">
+      <div style="flex:1; min-width:240px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border);">
+        <h4 style="color:var(--text-primary); margin-bottom:0.75rem;">Basic</h4>
+        <p style="color:var(--text-secondary); font-size:0.85rem; line-height:1.7;">1+ attack adapter, 1+ judge model, single assessment pass, findings report.</p>
+      </div>
+      <div style="flex:1; min-width:240px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid var(--accent-primary);">
+        <h4 style="color:var(--accent-primary); margin-bottom:0.75rem;">Standard</h4>
+        <p style="color:var(--text-secondary); font-size:0.85rem; line-height:1.7;">2+ adapters, 2+ judges from different vendors, reproduction testing, defense verification, CRPs with provenance.</p>
+      </div>
+      <div style="flex:1; min-width:240px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid #FFB300;">
+        <h4 style="color:#FFB300; margin-bottom:0.75rem;">Enterprise</h4>
+        <p style="color:var(--text-secondary); font-size:0.85rem; line-height:1.7;">3+ vendors for judges, cross-attacker validation, kernel enforcement, CRP Registry with full audit trail, compliance export.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;" class="reveal">
+      <p style="color: var(--text-secondary); margin-bottom: 1rem;">CLAP specification v1.0 &mdash; Apache 2.0 License</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;"><code style="color:var(--accent-primary);">pip install clap-protocol</code> &mdash; Make your AI security tool interoperable in under 100 lines.</p>
       <a href="#" class="btn btn-primary">View on GitHub (Coming Soon)</a>
     </div>
   </div>
