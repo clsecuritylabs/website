@@ -206,6 +206,15 @@ body::before {
   animation: fadeInUp 0.8s ease-out 0.1s backwards;
 }
 
+.hero h1 .connector {
+  font-size: 0.4em;
+  font-weight: 300;
+  opacity: 0.6;
+  display: block;
+  letter-spacing: 4px;
+  margin: 0.1em 0;
+}
+
 .hero h1 .gradient-text {
   background: linear-gradient(135deg, var(--red), var(--purple), var(--blue));
   -webkit-background-clip: text;
