@@ -31,7 +31,7 @@
   <div class="container">
     <span class="section-label">Research</span>
     <h1>Model Security Assessment</h1>
-    <p>Comprehensive red team evaluation across 27+ models, 10+ architecture families, and multiple parameter scales. Three-column scoring with multi-vendor judge verification.</p>
+    <p>Comprehensive red team evaluation across 85+ models, 12+ architecture families, 9 inference providers, and multiple parameter scales. Gemini-verified breach scoring with multi-vendor judge validation.</p>
   </div>
 </div>
 
@@ -41,7 +41,7 @@
     <!-- ─── CROSS-JUDGE FINDINGS ─── -->
     <div class="section-header reveal">
       <h2 class="section-title">Cross-Judge Validation</h2>
-      <p class="section-desc">The same breach data scored by three LLM judges from three different vendors. The honest breach rate is a range, not a point.</p>
+      <p class="section-desc">The same breach data scored by three LLM judges from three different vendors. The honest breach rate is a range, not a point. Our v1 gauntlet demonstrated a 41.9–67.1% spread depending on which vendor's model judges the findings.</p>
     </div>
 
     <div style="display:flex; gap:2rem; flex-wrap:wrap; margin-bottom:2rem;" class="reveal">
@@ -98,9 +98,9 @@
 
     <!-- ─── CROSS-MODEL FORGE ENGINE ─── -->
     <div class="section-header reveal" style="margin-top: 4rem;">
-      <h2 class="section-title">Cross-Model Forge Engine Results</h2>
-      <p class="section-desc">27+ models across 10+ architecture families. Three-column scoring: Keyword &rarr; Tight &rarr; Gemini Judge.<br/>
-      <span style="color:var(--accent-primary); font-weight:600;">Keyword scoring overreports by 3&ndash;10x. Only Gemini-verified rates are trustworthy.</span></p>
+      <h2 class="section-title">Cross-Model Forge Engine v2 Results</h2>
+      <p class="section-desc">85+ models across 12+ architecture families and 9 providers (NVIDIA, OpenAI, Azure, Together, Groq, SambaNova, Cerebras, AWS Bedrock, local). 40 advanced attack vectors across 6 modules: prompt extraction, goal hijacking, identity manipulation, compliance fatigue, semantic smuggling, and multi-step chain attacks..<br/>
+      <span style="color:var(--accent-primary); font-weight:600;">Gemini-verified scoring only &ndash; no keyword inflation.</span></p>
     </div>
 
     <div class="research-table-wrap reveal">
