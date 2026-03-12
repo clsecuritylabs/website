@@ -38,6 +38,26 @@
 <section class="section-sm">
   <div class="container">
 
+    <!-- ─── RESEARCH DISCLAIMER ─── -->
+    <div class="reveal" style="max-width:800px; margin: 0 auto 3rem; padding: 1.5rem 2rem; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border);">
+      <h3 style="font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-primary);">Research Disclaimer</h3>
+      <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.8; margin-bottom: 0.75rem;">
+        <strong>Point-in-time results:</strong> All results reflect model behavior at the time of testing and may not reflect current model versions, post-deployment safety patches, or provider configuration changes.
+      </p>
+      <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.8; margin-bottom: 0.75rem;">
+        <strong>Methodology:</strong> Results are produced using CLS Labs Forge Engine, Garak (NVIDIA), and PyRIT (Microsoft) with three-column scoring (keyword, tight, Gemini-as-judge). Different tools, prompts, or scoring criteria may produce different results.
+      </p>
+      <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.8; margin-bottom: 0.75rem;">
+        <strong>Provider filtering:</strong> Some results reflect provider-level safety filtering applied at the inference layer (e.g., serverless endpoints). These results measure the provider&rsquo;s defense stack, not the model&rsquo;s intrinsic alignment. Deployment configuration significantly affects security posture.
+      </p>
+      <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.8; margin-bottom: 0.75rem;">
+        <strong>No warranty or recommendation:</strong> Published research is for informational and educational purposes only. CLS Labs does not warrant that any model is safe or unsafe for any particular deployment. Organizations should conduct their own assessments before deployment decisions.
+      </p>
+      <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.8; margin-bottom: 0;">
+        <strong>Authorized testing:</strong> All testing is conducted against publicly available API endpoints or dedicated endpoints under CLS Labs&rsquo; own accounts, in accordance with each provider&rsquo;s terms of service. No unauthorized access is involved in any published research.
+      </p>
+    </div>
+
     <!-- ─── CROSS-JUDGE FINDINGS ─── -->
     <div class="section-header reveal">
       <h2 class="section-title">Cross-Judge Validation</h2>
@@ -262,6 +282,15 @@
           </tr>
         </tfoot>
       </table>
+    </div>
+
+    <!-- ─── LICENSE ─── -->
+    <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+      <p style="color:var(--text-muted); font-size:0.8rem;">
+        Research data &copy; 2026 CLS Security Labs LLC.
+        Licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" style="color:var(--text-muted); text-decoration:underline;">CC BY-NC-ND 4.0</a>. Citation with attribution permitted.
+        Commercial use requires written permission.
+      </p>
     </div>
 
   </div>
