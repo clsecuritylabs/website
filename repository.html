@@ -59,26 +59,26 @@
       <div class="code-block">
 <span class="comment"># Example: CRP-2026-0147</span>
 <span class="keyword">attack:</span>
-  <span class="keyword">class:</span> <span class="string">phrasing.PastTense</span>
+  <span class="keyword">category:</span> <span class="string">prompt_injection</span>
   <span class="keyword">reproduction_rate:</span> <span class="string">0.95</span>
-  <span class="keyword">models_affected:</span> <span class="string">[llama-3.3-70b, phi-4-14b, gemma-2-9b]</span>
+  <span class="keyword">models_affected:</span> <span class="string">[listed under NDA]</span>
 
 <span class="keyword">defense:</span>
-  <span class="keyword">type:</span> <span class="string">Tier 2 distilled classifier</span>
+  <span class="keyword">type:</span> <span class="string">Multi-tier semantic classification</span>
   <span class="keyword">verified_block_rate:</span> <span class="string">0.88</span>
   <span class="keyword">false_positive_rate:</span> <span class="string">0.02</span>
-  <span class="keyword">latency:</span> <span class="string">23ms avg</span>
+  <span class="keyword">latency:</span> <span class="string">&lt;15ms avg</span>
 
 <span class="keyword">verification:</span>
   <span class="keyword">breach_iterations:</span> <span class="string">5</span>
   <span class="keyword">block_iterations:</span> <span class="string">10</span>
-  <span class="keyword">judge_model:</span> <span class="string">llama-3.3-70b-instruct</span>
+  <span class="keyword">judge_panel:</span> <span class="string">3 vendors, multi-model consensus</span>
   <span class="keyword">judge_confidence:</span> <span class="string">0.94</span>
 
 <span class="keyword">frameworks:</span>
-  <span class="string">- OWASP LLM09: Misinformation</span>
-  <span class="string">- MITRE ATLAS: AML.T0054</span>
-  <span class="string">- NIST AI RMF: GV-1.2</span>
+  <span class="string">- OWASP LLM01: Prompt Injection</span>
+  <span class="string">- MITRE ATLAS: AML.T0051</span>
+  <span class="string">- NIST AI RMF: MG-2.1</span>
       </div>
     </div>
 
@@ -115,7 +115,7 @@
     <div class="footer-inner">
       <span class="footer-text">&copy; 2026 Closed Loop Security Labs LLC. All rights reserved.</span>
       <ul class="footer-links">
-        <li><a href="mailto:brandon@clsecuritylabs.com">Contact</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#d0b2a2b1beb4bfbe90b3bca3b5b3a5a2b9a4a9bcb1b2a3feb3bfbd">Contact</a></li>
         <li><a href="https://github.com/clsecuritylabs" target="_blank">GitHub</a></li>
       </ul>
     </div>

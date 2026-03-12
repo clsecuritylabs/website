@@ -35,7 +35,7 @@
     <p class="hero-tagline">Test in the Forge. Temper in the Armory. We find vulnerabilities in your AI systems, verify they're real, deploy guardrails, and prove they work &mdash; in a single closed loop.</p>
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-number">130,000+</div>
+        <div class="stat-number">120,000+</div>
         <div class="stat-label">Probes Executed</div>
       </div>
       <div class="stat">
@@ -69,7 +69,7 @@
       <div class="card reveal">
         <div class="card-icon">&#x1F534;</div>
         <h3>The Forge &mdash; Attack</h3>
-        <p>Automated adversarial probing using Garak, PyRIT, and custom exploit chains. DAN jailbreaks, encoding bypasses, prompt injection, tense-based evasion, and more.</p>
+        <p>Automated adversarial probing across 19 attack categories mapped to OWASP LLM Top 10 and MITRE ATLAS. Multi-vector, multi-turn, multi-model. We don&rsquo;t guess. We probe.</p>
       </div>
       <div class="card reveal">
         <div class="card-icon">&#x1F7E3;</div>
@@ -79,7 +79,7 @@
       <div class="card reveal">
         <div class="card-icon">&#x1F535;</div>
         <h3>The Armory &mdash; Remediate</h3>
-        <p>Guardrails deployed automatically based on confidence scores. Three-tier defense: regex filters (&lt;5ms), distilled classifiers (20-50ms), LLM judges (200ms+). Verified block rate &ge;80%.</p>
+        <p>Defense stack deployed automatically based on verified findings. Multi-tier classification with &lt;15ms latency. Verified breach rate: 47.1% &rarr; 0.0% after deployment.</p>
       </div>
     </div>
   </div>
@@ -101,7 +101,6 @@
             <th>DNA</th>
             <th>Probes</th>
             <th>Defense Rate</th>
-            <th>Worst Module</th>
           </tr>
         </thead>
         <tbody>
@@ -111,7 +110,6 @@
             <td>Meta / Llama</td>
             <td>48,654</td>
             <td><span class="defense-rate rate-mid">70.3%</span></td>
-            <td>Phrasing: PastTense (5.3%)</td>
           </tr>
           <tr>
             <td><strong>Llama-3.1-405B</strong> <span style="font-size:0.7rem;color:var(--accent-primary);">&#x2714; VERIFIED</span></td>
@@ -119,7 +117,6 @@
             <td>Meta / Llama</td>
             <td>50,000+</td>
             <td><span class="defense-rate rate-mid">73.4%</span></td>
-            <td>Malware: SubFunctions (78.6%)</td>
           </tr>
           <tr>
             <td><strong>DeepSeek R1</strong> <span style="font-size:0.7rem;color:var(--accent-primary);">&#x2714; VERIFIED</span></td>
@@ -127,7 +124,6 @@
             <td>DeepSeek</td>
             <td>438</td>
             <td><span class="defense-rate rate-high">92.9%</span></td>
-            <td>Virtualization (100%)</td>
           </tr>
           <tr>
             <td><strong>GLM-5</strong> <span style="font-size:0.7rem;color:var(--accent-primary);">&#x2714; VERIFIED</span></td>
@@ -135,7 +131,6 @@
             <td>Zhipu AI</td>
             <td>230</td>
             <td><span class="defense-rate rate-high">95.7%</span></td>
-            <td>Ancient Language (80%)</td>
           </tr>
           <tr>
             <td><strong>GPT-OSS-120B</strong> <span style="font-size:0.7rem;color:var(--accent-primary);">&#x2714; VERIFIED</span></td>
@@ -143,7 +138,6 @@
             <td>OpenAI</td>
             <td>434</td>
             <td><span class="defense-rate rate-high">91.0%</span></td>
-            <td>Simple Override (breach)</td>
           </tr>
         </tbody>
       </table>
@@ -159,7 +153,7 @@
     <div class="footer-inner">
       <span class="footer-text">&copy; 2026 Closed Loop Security Labs LLC. All rights reserved.</span>
       <ul class="footer-links">
-        <li><a href="mailto:brandon@clsecuritylabs.com">Contact</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#bad8c8dbd4ded5d4fad9d6c9dfd9cfc8d3cec3d6dbd8c994d9d5d7">Contact</a></li>
         <li><a href="https://github.com/clsecuritylabs" target="_blank">GitHub</a></li>
       </ul>
     </div>

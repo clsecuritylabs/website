@@ -59,34 +59,31 @@
         <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem;">The Sovereign AI Factory</h3>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">CLS Labs operates a privately-owned AI research cluster for sovereign workloads &mdash; no third-party data exposure, no cloud dependencies for sensitive operations. For clients requiring maximum data control, assessments run entirely on-premises. For scale and speed, we also operate across trusted cloud infrastructure with strict data handling policies. Your risk profile determines the deployment model &mdash; not our convenience.</p>
         <div class="rig-spec">
-          <span class="label">Compute:</span> <span class="value">6&times; NVIDIA RTX 30-series GPU cluster (~56GB total VRAM)</span><br/>
-          <span class="label">Inference:</span> <span class="value">vLLM &bull; Triton &bull; llama.cpp (GGUF) &bull; LiteLLM Gateway</span><br/>
-          <span class="label">Orchestration:</span> <span class="value">Kubernetes (k3s) + Cilium CNI</span><br/>
-          <span class="label">Identity:</span> <span class="value">SPIFFE/SPIRE + LDAP/AD</span><br/>
-          <span class="label">Monitoring:</span> <span class="value">Prometheus + Grafana + Wazuh SIEM</span><br/>
-          <span class="label">Networking:</span> <span class="value">pfSense + Zero-Trust + Hubble</span><br/>
-          <span class="label">Security:</span> <span class="value">LLM Guard &bull; Garak &bull; PyRIT</span><br/>
-          <span class="label">Agents:</span> <span class="value">LangGraph + CLAP Orchestration Loop</span><br/>
-          <span class="label">Models:</span> <span class="value">70B (6-GPU tensor parallel), 7-14B (1-2 GPU)</span><br/>
-          <span class="label">Formats:</span> <span class="value">SafeTensors (vLLM/Triton) + GGUF (llama.cpp)</span><br/>
+          <span class="label">Compute:</span> <span class="value">Multi-GPU NVIDIA cluster for parallel inference and training</span><br/>
+          <span class="label">Inference:</span> <span class="value">Multi-framework serving with unified API gateway</span><br/>
+          <span class="label">Orchestration:</span> <span class="value">Kubernetes with eBPF-based network policy enforcement</span><br/>
+          <span class="label">Identity:</span> <span class="value">Zero-trust identity with workload attestation</span><br/>
+          <span class="label">Monitoring:</span> <span class="value">Full observability stack with SIEM integration</span><br/>
+          <span class="label">Networking:</span> <span class="value">Segmented network with deep packet observability</span><br/>
+          <span class="label">Security:</span> <span class="value">Proprietary and open-source adversarial testing tooling</span><br/>
           <span class="label">Policy:</span> <span class="value">Triple-Lineage Rule (no shared DNA in validation)</span>
         </div>
 
         <h3 style="font-family: var(--font-display); margin-top: 2rem; font-size: 1.5rem; margin-bottom: 1.5rem;">Audit &amp; Compliance Stack</h3>
         <p style="color: var(--text-secondary); margin-bottom: 1rem;">Every assessment produces a complete chain of evidence from probe to remediation.</p>
         <div class="rig-spec">
-          <span class="label">Data Store:</span> <span class="value">PostgreSQL + Delta Lake (versioned, append-only)</span><br/>
-          <span class="label">Classification:</span> <span class="value">Proprietary Semantic Defense Engine (deduplication + integrity verification)</span><br/>
-          <span class="label">Logging:</span> <span class="value">Wazuh SIEM &bull; Immutable audit trails</span><br/>
+          <span class="label">Data Store:</span> <span class="value">Versioned, append-only data lake with transactional backing store</span><br/>
+          <span class="label">Classification:</span> <span class="value">Proprietary Semantic Defense Engine</span><br/>
+          <span class="label">Logging:</span> <span class="value">SIEM with immutable audit trails</span><br/>
           <span class="label">Provenance:</span> <span class="value">CLAP Layer 2 verification pipeline (N&ge;3 reproductions)</span><br/>
           <span class="label">Frameworks:</span> <span class="value">NIST AI RMF &bull; OWASP LLM Top 10 &bull; MITRE ATLAS</span><br/>
-          <span class="label">Guardrails:</span> <span class="value">Six-Gate Integrity Pipeline (source auth &rarr; semantic verify &rarr; VBR &rarr; benign test &rarr; diff review &rarr; canary deploy)</span><br/>
+          <span class="label">Guardrails:</span> <span class="value">Multi-stage integrity verification pipeline</span><br/>
           <span class="label">Config Mgmt:</span> <span class="value">Signed, versioned, rollback-capable guardrail configs</span>
         </div>
 
         <h3 style="font-family: var(--font-display); margin-top: 2rem; margin-bottom: 1rem;">Contact</h3>
         <p style="color: var(--text-secondary);">
-          <strong>Email:</strong> <a href="mailto:brandon@clsecuritylabs.com">brandon@clsecuritylabs.com</a><br/>
+          <strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#84e6f6e5eae0ebeac4e7e8f7e1e7f1f6edf0fde8e5e6f7aae7ebe9"><span class="__cf_email__" data-cfemail="0a68786b646e65644a6966796f697f78637e73666b687924696567">[email&#160;protected]</span></a><br/>
           <strong>Web:</strong> clsecuritylabs.com<br/>
           <strong>GitHub:</strong> <a href="https://github.com/clsecuritylabs" target="_blank">github.com/clsecuritylabs</a>
         </p>
@@ -106,6 +103,6 @@
     </div>
   </div>
 </footer>
-<script src="js/main.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 </body>
 </html>

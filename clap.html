@@ -46,7 +46,7 @@
       <div class="layer-card reveal">
         <div class="layer-number">01</div>
         <h3 style="color: var(--red);">Adapters <span style="font-size:0.7rem; color:var(--text-muted); font-weight:400;">&mdash; CLAP Protocol</span></h3>
-        <p>How tools connect. The CLAP protocol defines standardized interfaces for any red team scanner (Garak, PyRIT, promptfoo, custom), any defense framework (NeMo Guardrails, Llama Guard, custom), and any verification judge (Gemini, Claude, Llama, local). Make your tool interoperable in under 100 lines. <code style="font-size:0.8rem; color:var(--accent-primary);">pip install clap-protocol</code></p>
+        <p>How tools connect. The CLAP protocol defines standardized interfaces for any red team scanner, any defense framework, and any verification judge. Make your tool interoperable in under 100 lines. <code style="font-size:0.8rem; color:var(--accent-primary);">pip install clap-protocol</code></p>
       </div>
       <div class="layer-card reveal">
         <div class="layer-number">02</div>
@@ -56,7 +56,7 @@
       <div class="layer-card reveal">
         <div class="layer-number">03</div>
         <h3 style="color: var(--blue);">Orchestration</h3>
-        <p>How the loop runs. Attack &rarr; verify &rarr; reproduce &rarr; remediate &rarr; deploy &rarr; re-verify &rarr; iterate. Each cycle generates structured training data that makes the next cycle smarter. Confidence-based deployment: &ge;0.90 auto-deploy, 0.70&ndash;0.90 monitored, &lt;0.70 human-in-the-loop.</p>
+        <p>How the loop runs. Attack &rarr; verify &rarr; reproduce &rarr; remediate &rarr; deploy &rarr; re-verify &rarr; iterate. Each cycle generates structured training data that makes the next cycle smarter. Confidence-based deployment gates determine whether defenses auto-deploy, enter monitored rollout, or require human review.</p>
       </div>
       <div class="layer-card reveal">
         <div class="layer-number">04</div>
@@ -77,15 +77,15 @@
       <div style="display:flex; gap:2rem; flex-wrap:wrap; margin-bottom:2rem;">
         <div style="flex:1; min-width:200px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid var(--red);">
           <h4 style="color:var(--red); margin-bottom:0.5rem;">Attack Adapters</h4>
-          <p style="color:var(--text-secondary); font-size:0.9rem;">Garak, PyRIT, promptfoo, Forge Engine, HiddenLayer, custom scripts &mdash; any tool that generates adversarial prompts.</p>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">Any tool that generates adversarial prompts &mdash; open-source scanners, proprietary engines, or custom scripts. CLAP-compatible in under 100 lines.</p>
         </div>
         <div style="flex:1; min-width:200px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid var(--purple);">
           <h4 style="color:var(--purple); margin-bottom:0.5rem;">Judge Adapters</h4>
-          <p style="color:var(--text-secondary); font-size:0.9rem;">Gemini, Claude, Llama, GPT-4, local models &mdash; any LLM that can evaluate whether a response is a genuine breach.</p>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">Multi-vendor LLM judge evaluation from independent providers. Any model that can evaluate whether a response constitutes a genuine breach.</p>
         </div>
         <div style="flex:1; min-width:200px; padding:1.5rem; background:var(--bg-card); border-radius:8px; border:1px solid var(--border); border-top: 3px solid var(--blue);">
           <h4 style="color:var(--blue); margin-bottom:0.5rem;">Defense Adapters</h4>
-          <p style="color:var(--text-secondary); font-size:0.9rem;">NeMo Guardrails, Llama Guard, AWS Bedrock Guards, Sovereign Guardrail, custom classifiers &mdash; any defense layer.</p>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">Compatible with leading guardrail frameworks, cloud-native defense APIs, and custom classifiers &mdash; any defense layer that intercepts or filters LLM traffic.</p>
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@
   <span class="keyword">provider:</span> <span class="string">together (dedicated endpoint)</span>
 
 <span class="keyword">attack:</span>
-  <span class="keyword">vector:</span> <span class="string">1.03 &mdash; Virtualization</span>
+  <span class="keyword">vector:</span> <span class="string">[classified &mdash; available in assessment report]</span>
   <span class="keyword">category:</span> <span class="string">Direct Prompt Injection</span>
   <span class="keyword">variants_tested:</span> <span class="string">5</span>
 
@@ -173,7 +173,7 @@
     <div class="footer-inner">
       <span class="footer-text">&copy; 2026 Closed Loop Security Labs LLC. All rights reserved.</span>
       <ul class="footer-links">
-        <li><a href="mailto:brandon@clsecuritylabs.com">Contact</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#84e6f6e5eae0ebeac4e7e8f7e1e7f1f6edf0fde8e5e6f7aae7ebe9">Contact</a></li>
         <li><a href="https://github.com/clsecuritylabs" target="_blank">GitHub</a></li>
       </ul>
     </div>
