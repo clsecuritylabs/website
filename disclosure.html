@@ -4,8 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Responsible Disclosure | Closed Loop Security Labs</title>
-  <meta name="description" content="How to report security vulnerabilities to CLS Security Labs."/>
-  <link rel="stylesheet" href="css/style.css?v=5"/>
+  <meta name="description" content="CLS Security Labs vulnerability reporting and responsible disclosure policy."/>
+  <link rel="stylesheet" href="css/style.css?v=6"/>
   <link rel="icon" href="assets/logo.png" type="image/png"/>
 </head>
 <body>
@@ -19,7 +19,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="research.html">Research</a></li>
       <li><a href="blog.html">Blog</a></li>
-      <li><a href="clap.html">CLAP Protocol</a></li>
+      <li><a href="clap.html">The Closed Loop</a></li>
       <li><a href="services.html">Services</a></li>
       <li><a href="repository.html">Repository</a></li>
       <li><a href="about.html">About</a></li>
@@ -30,19 +30,110 @@
 <div class="page-header">
   <div class="container">
     <span class="section-label">Security</span>
-    <h1>Responsible Disclosure</h1>
-    <p>How to report security vulnerabilities to CLS Security Labs.</p>
+    <h1>Responsible Disclosure Policy</h1>
+    <p>Version 1.0 &mdash; March 2026</p>
   </div>
 </div>
 
 <section class="section-sm">
   <div class="container">
-    <div class="reveal" style="max-width:800px; margin: 0 auto; padding: 3rem 2rem; text-align:center;">
-      <div style="padding: 2rem; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border);">
-        <div style="font-size: 2.5rem; margin-bottom: 1rem;">&#x1F6E0;</div>
-        <h3 style="font-family: var(--font-display); margin-bottom: 1rem;">Coming Soon</h3>
-        <p style="color: var(--text-secondary); line-height: 1.8;">Responsible Disclosure Policy is being finalized. If you have an urgent security concern, contact <a href="mailto:brandon@clsecuritylabs.com" style="color:var(--purple);">brandon@clsecuritylabs.com</a>.</p>
+    <div style="max-width:800px; margin:0 auto; color:var(--text-secondary); line-height:1.9;">
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2rem;">1. Purpose and Scope</h2>
+      <p>This policy defines how CLS Security Labs LLC (&ldquo;CLS Labs&rdquo;) handles the discovery, documentation, and disclosure of security vulnerabilities found during client engagements, internal research, or third-party reports. This policy applies to all CLS Labs personnel, contractors, and anyone reporting vulnerabilities to CLS Labs.</p>
+      <p>CLS Labs conducts authorized security assessments of AI systems. During these assessments, we routinely discover vulnerabilities in client models, infrastructure, and configurations. This policy ensures vulnerabilities are handled responsibly, protecting both our clients and the broader AI ecosystem.</p>
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2.5rem;">2. Vulnerability Severity Classification</h2>
+      <p>CLS Labs classifies all discovered vulnerabilities using the following severity levels:</p>
+
+      <div style="overflow-x:auto; margin:1.5rem 0;">
+        <table class="research-table" style="font-size:0.85rem;">
+          <thead>
+            <tr>
+              <th>Severity</th>
+              <th>Criteria</th>
+              <th>Example</th>
+              <th>Response Timeline</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--red);">CRITICAL</strong></td>
+              <td>Exploitable with no user interaction; leads to data breach, system compromise, or safety bypass at scale</td>
+              <td>System prompt extraction revealing PII; complete jailbreak with harmful output generation; RAG data exfiltration</td>
+              <td>Client notified within 24 hours. Interim mitigation recommended immediately. Full remediation within 7 days.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#E65100;">HIGH</strong></td>
+              <td>Exploitable with minimal effort; bypasses primary safety controls or exposes sensitive data</td>
+              <td>Consistent jailbreak via encoding bypass; agent tool abuse enabling unauthorized actions; output containing credentials</td>
+              <td>Client notified within 48 hours. Remediation plan within 14 days. Fix verified within 30 days.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#F9A825;">MEDIUM</strong></td>
+              <td>Exploitable under specific conditions; partial bypass of safety controls</td>
+              <td>Identity manipulation in specific contexts; partial system prompt leakage; inconsistent safety responses</td>
+              <td>Included in assessment report. Remediation within 30&ndash;60 days.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#22C55E;">LOW</strong></td>
+              <td>Minor issues with limited exploitability or impact</td>
+              <td>Verbose error messages; model reveals framework version; minor prompt leakage without sensitive content</td>
+              <td>Included in assessment report. Remediation at client&rsquo;s discretion.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2.5rem;">3. Disclosure During Client Engagements</h2>
+
+      <h3 style="font-family:var(--font-display); color:var(--text-primary); font-size:1.1rem; margin-top:1.5rem;">3.1 Standard Disclosure Process</h3>
+      <p>All vulnerabilities discovered during authorized assessments are documented in the assessment report and delivered to the client at the conclusion of the engagement. The report includes: vulnerability description, severity classification, proof of concept (sanitized), OWASP/MITRE ATLAS/NIST AI RMF mapping, potential business impact, and specific remediation recommendations.</p>
+
+      <h3 style="font-family:var(--font-display); color:var(--text-primary); font-size:1.1rem; margin-top:1.5rem;">3.2 Critical Vulnerability Escalation</h3>
+      <p>If a CRITICAL severity vulnerability is discovered during an engagement, CLS Labs will not wait for the full report. The escalation procedure is:</p>
+      <div style="padding:1.25rem 1.5rem; border-radius:8px; background:rgba(239,68,68,0.08); border-left:3px solid var(--red); margin:1rem 0;">
+        <p style="margin:0 0 0.5rem;"><strong>Step 1 (Immediate):</strong> Assessor documents the vulnerability with proof of concept and notifies the CLS Labs engagement lead.</p>
+        <p style="margin:0 0 0.5rem;"><strong>Step 2 (Within 4 hours):</strong> Engagement lead reviews and confirms the finding.</p>
+        <p style="margin:0 0 0.5rem;"><strong>Step 3 (Within 24 hours):</strong> Client&rsquo;s designated security contact is notified via the secure communication channel established at engagement kickoff.</p>
+        <p style="margin:0 0 0.5rem;"><strong>Step 4 (Within 48 hours):</strong> CLS Labs provides an interim mitigation recommendation (e.g., system prompt hardening, temporary input filter, rate limiting).</p>
+        <p style="margin:0;"><strong>Step 5 (Within 7 days):</strong> CLS Labs delivers a Certified Remediation Pattern (CRP) with full technical remediation guidance.</p>
+      </div>
+
+      <h3 style="font-family:var(--font-display); color:var(--text-primary); font-size:1.1rem; margin-top:1.5rem;">3.3 Notification Channels</h3>
+      <p>Critical and high-severity notifications are delivered through: encrypted email (PGP/S-MIME where available), secure messaging (client&rsquo;s preferred platform, e.g., dedicated Slack channel), or direct phone call to the designated security contact for critical findings. Notifications are never sent via unencrypted email or public channels.</p>
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2.5rem;">4. Research and Industry-Wide Vulnerability Disclosure</h2>
+      <p>CLS Labs may discover vulnerabilities that affect widely-used AI models, frameworks, or services during internal research (not specific to any client engagement). In these cases:</p>
+      <p><strong>4.1 Coordinated Disclosure:</strong> CLS Labs will attempt to contact the affected vendor or maintainer before any public disclosure. We will provide a detailed vulnerability report and allow a reasonable remediation period (typically 90 days).</p>
+      <p><strong>4.2 Disclosure Timeline:</strong> If the vendor does not respond within 14 days of initial contact, CLS Labs will make a second contact attempt. If no response is received within 30 days, CLS Labs reserves the right to publish a limited advisory (without full exploitation details) after the 90-day window.</p>
+      <p><strong>4.3 Active Exploitation Exception:</strong> If CLS Labs becomes aware that a vulnerability is being actively exploited in the wild, the disclosure timeline may be accelerated to protect affected parties. CLS Labs will still attempt to coordinate with the vendor.</p>
+      <p><strong>4.4 Published Advisories:</strong> CLS Labs advisories will be published on clsecuritylabs.com/advisories and will include: advisory ID, affected system/model, severity, description, mitigation recommendations, and timeline. Full exploitation details will only be published after the vendor has had reasonable time to patch.</p>
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2.5rem;">5. Information We Never Disclose</h2>
+      <p>CLS Labs will never publicly disclose: client names or identifying information without written consent; client system prompts, model configurations, or proprietary data; specific client vulnerability details or breach rates; exploitation techniques for unpatched vulnerabilities (during the coordinated disclosure window); or any information protected by NDA, MSA, or Data Handling Agreement.</p>
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2.5rem;">6. Reporting Vulnerabilities to CLS Labs</h2>
+
+      <div style="padding:1.5rem 2rem; border-radius:8px; background:var(--bg-card); border:1px solid var(--border); margin:1rem 0;">
+        <p>If you discover a vulnerability in any CLS Labs product, service, or infrastructure, we encourage responsible reporting:</p>
+        <p style="margin:1rem 0 0.5rem;"><strong>Email:</strong> <a href="mailto:security@clsecuritylabs.com" style="color:var(--purple);">security@clsecuritylabs.com</a></p>
+        <p style="margin:0;"><strong>PGP Key:</strong> Available at <a href="/.well-known/security.txt" style="color:var(--purple);">clsecuritylabs.com/.well-known/security.txt</a></p>
+      </div>
+
+      <p>Please include: a description of the vulnerability, steps to reproduce, potential impact, and any suggested remediation. CLS Labs will acknowledge receipt within 48 hours, provide a preliminary assessment within 7 business days, and keep the reporter informed of remediation progress.</p>
+      <p><strong>CLS Labs will not take legal action against individuals who discover and report vulnerabilities in good faith, in accordance with this policy.</strong></p>
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2.5rem;">7. Internal Data Handling for Discovered Vulnerabilities</h2>
+      <p>All vulnerability data discovered during engagements is handled per the CLS Labs Data Handling Agreement:</p>
+      <p><strong>Client-specific findings:</strong> Encrypted at rest, access-controlled, deleted per the retention schedule (raw data within 30 days post-delivery).</p>
+      <p><strong>Anonymized patterns:</strong> Attack techniques and breach patterns are anonymized and may be used to improve CLS Labs classifiers and tools. No client-identifiable information is retained.</p>
+      <p><strong>CRP issuance:</strong> Certified Remediation Patterns are issued for verified, reproducible vulnerabilities. CRPs contain generalized remediation guidance and do not include client-specific details.</p>
+
+      <h2 style="font-family:var(--font-display); color:var(--text-primary); margin-top:2.5rem;">8. Policy Review and Updates</h2>
+      <p>This policy is reviewed annually or when significant changes occur in the threat landscape, regulatory environment, or CLS Labs operations. The current version is always available at this page.</p>
+      <p><strong>Document Owner:</strong> Brandon Arbour, Founder &amp; CEO</p>
+
     </div>
   </div>
 </section>
