@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Research | Closed Loop Security Labs</title>
-  <meta name="description" content="Cross-architecture LLM security assessment results across 85+ models with multi-vendor judge verification."/>
+  <meta name="description" content="Cross-architecture LLM security assessment results across 150+ models, 530,000+ probes, 6 attack surfaces, with multi-vendor judge verification."/>
   <link rel="stylesheet" href="css/style.css?v=6"/>
   <link rel="icon" href="assets/logo.png" type="image/png"/>
 </head>
@@ -31,7 +31,7 @@
   <div class="container">
     <span class="section-label">Research</span>
     <h1>Model Security Assessment</h1>
-    <p>Comprehensive red team evaluation across 85+ models, 12+ architecture families, 9 inference providers, and multiple parameter scales. Gemini-verified breach scoring with multi-vendor judge validation.</p>
+    <p>Comprehensive red team evaluation across 150+ models, 530,000+ adversarial probes, 6 attack surfaces, and 11 inference providers. Three-vendor independent judge validation.</p>
   </div>
 </div>
 
@@ -116,11 +116,60 @@
 
     <hr class="gradient-divider reveal"/>
 
+    <!-- ─── AGENT SECURITY RESEARCH ─── -->
+    <div class="section-header reveal" style="margin-top: 4rem;">
+      <h2 class="section-title">Agent Security Assessment</h2>
+      <p class="section-desc">When AI agents have real tools &mdash; browse the web, execute code, send emails, query databases &mdash; the attack surface changes completely. Standard safety evaluations only test text generation. We test what agents actually do.</p>
+    </div>
+
+    <div style="display:flex; gap:2rem; flex-wrap:wrap; margin-bottom:2rem;" class="reveal">
+      <div class="card" style="flex:1; min-width:180px; text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; font-weight:700; color:var(--red);">46.3%</div>
+        <div style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Highest Agent Breach Rate</div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">With tool access</div>
+      </div>
+      <div class="card" style="flex:1; min-width:180px; text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; font-weight:700; color:var(--purple);">23</div>
+        <div style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Models Tested as Agents</div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">With 10 tool definitions</div>
+      </div>
+      <div class="card" style="flex:1; min-width:180px; text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; font-weight:700; color:#22C55E;">2.5%</div>
+        <div style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Lowest Agent Breach Rate</div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">Cross-judge validated</div>
+      </div>
+      <div class="card" style="flex:1; min-width:180px; text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; font-weight:700; color:var(--accent-primary);">6</div>
+        <div style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Attack Surfaces Tested</div>
+        <div style="color:var(--text-muted); font-size:0.75rem;">Text, agent, RAG, cross-agent, vision, autonomous</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="max-width:800px; margin:0 auto;">
+      <div style="padding:1.25rem 1.5rem; border-radius:8px; margin:1rem 0; background:rgba(239,68,68,0.08); border-left:3px solid var(--red);">
+        <strong>Tool access escalates risk dramatically.</strong> The same model scores 19% in text-only testing and 46% with tools attached. Standard safety evaluations that only test text generation miss the entire action surface &mdash; agents don&rsquo;t just say harmful things, they do them.
+      </div>
+      <div style="padding:1.25rem 1.5rem; border-radius:8px; margin:1rem 0; background:rgba(139,92,246,0.08); border-left:3px solid var(--purple);">
+        <strong>One attack vector breaches every model with tool access.</strong> Malicious instructions embedded in data files &mdash; CSV exports, HTML documents, API responses &mdash; achieve universal code execution across all tested models. The model doesn&rsquo;t describe the attack. It runs it.
+      </div>
+      <div style="padding:1.25rem 1.5rem; border-radius:8px; margin:1rem 0; background:rgba(59,130,246,0.08); border-left:3px solid var(--blue);">
+        <strong>One autonomous agent platform wrote an attacker&rsquo;s SSH key</strong> to <code style="color:var(--purple);">~/.ssh/authorized_keys</code> with correct 600 permissions, then scanned 127,261 files including API tokens and PKI certificates. It defended against explicit attacks perfectly &mdash; but couldn&rsquo;t distinguish a legitimate sysadmin request from adversarial reconnaissance.
+      </div>
+    </div>
+
+    <div class="reveal" style="max-width:700px; margin:2rem auto; text-align:center; padding:2rem; border-radius:8px; background:var(--bg-card); border:1px solid var(--border);">
+      <h3 style="font-family:var(--font-display); margin-bottom:0.75rem; color:var(--text-primary);">Full Assessment Data Available</h3>
+      <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.25rem;">Detailed per-model agent security results, RAG injection findings, vision attack data, and cross-vendor judge validation are available under NDA. Request your model&rsquo;s specific results or a full assessment of your deployment.</p>
+      <a href="services.html" class="btn btn-primary" style="display:inline-block;">Request Assessment Data &rarr;</a>
+    </div>
+
+    <hr class="gradient-divider reveal"/>
+
     <!-- ─── CROSS-MODEL FORGE ENGINE ─── -->
     <div class="section-header reveal" style="margin-top: 4rem;">
-      <h2 class="section-title">Cross-Model Forge Engine v2 Results</h2>
-      <p class="section-desc">85+ models across 12+ architecture families and 9 providers (NVIDIA, OpenAI, Azure, Together, Groq, SambaNova, Cerebras, AWS Bedrock, local). 40 advanced attack vectors across 6 modules: prompt extraction, goal hijacking, identity manipulation, compliance fatigue, semantic smuggling, and multi-step chain attacks.<br/>
-      <span style="color:var(--accent-primary); font-weight:600;">Verified breach scoring via Gemini 2.0 Flash. Multi-vendor cross-judge validation in progress &mdash; see methodology above.</span></p>
+      <h2 class="section-title">Cross-Model Assessment Results</h2>
+      <p class="section-desc">150+ models across 12+ architecture families and 11 providers. 21 attack modules covering prompt extraction, goal hijacking, identity manipulation, compliance fatigue, semantic smuggling, chain attacks, agent tool injection, cross-agent contamination, RAG poisoning, and financial fraud.<br/>
+      <span style="color:var(--accent-primary); font-weight:600;">Cross-judge validated: 199 runs across 30+ models. Three independent vendors, consensus scoring.</span></p>
     </div>
 
     <div class="research-table-wrap reveal">
