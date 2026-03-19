@@ -123,21 +123,21 @@
       font-size: 0.9rem;
       line-height: 1.7;
     }
-    /* ─── ANIMATED CLOSED LOOP ─── */
+    /* ─── ANIMATED NEURAL LOOP ─── */
     .loop-section { position: relative; padding: 3rem 0; }
     .loop-container {
       position: relative;
       width: 500px;
-      height: 500px;
+      height: 340px;
       margin: 0 auto;
     }
     .loop-logo {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 220px;
-      opacity: 0.55;
-      filter: drop-shadow(0 0 30px rgba(139,92,246,0.3));
+      width: 280px;
+      opacity: 0.7;
+      filter: drop-shadow(0 0 40px rgba(139,92,246,0.2));
     }
     .loop-node {
       position: absolute;
@@ -168,63 +168,117 @@
       letter-spacing: 0.5px;
       margin-top: 0.15rem;
     }
-    .loop-node.n-attack    { top: 50%;  left: -10px; transform: translateY(-50%); }
-    .loop-node.n-classify  { top: 10px;  left: 50%; transform: translateX(-50%); }
-    .loop-node.n-score     { top: 50%;  right: -10px; transform: translateY(-50%); }
-    .loop-node.n-remediate { bottom: 10px; left: 50%; transform: translateX(-50%); }
+    /* Nodes: Attack left (red), Classify top, Score right (blue), Remediate bottom */
+    .loop-node.n-attack    { top: 50%;  left: -30px; transform: translateY(-50%); }
+    .loop-node.n-classify  { top: -30px; left: 50%; transform: translateX(-50%); }
+    .loop-node.n-score     { top: 50%;  right: -30px; transform: translateY(-50%); }
+    .loop-node.n-remediate { bottom: -30px; left: 50%; transform: translateX(-50%); }
     .n-attack .loop-node-icon    { background: rgba(239,68,68,0.12); color: var(--red); }
     .n-classify .loop-node-icon  { background: rgba(139,92,246,0.12); color: var(--purple); }
     .n-score .loop-node-icon     { background: rgba(59,130,246,0.12); color: var(--blue); }
     .n-remediate .loop-node-icon { background: rgba(34,197,94,0.12); color: #22C55E; }
-    .loop-track {
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 320px; height: 320px;
-      transform: translate(-50%, -50%);
-      border: 1px solid rgba(139,92,246,0.15);
-      border-radius: 50%;
+
+    /* Figure-8 infinity path keyframes */
+    @keyframes infinity-path {
+      0%      { transform: translate(0, 0); }
+      4%      { transform: translate(30px, -28px); }
+      8%      { transform: translate(65px, -48px); }
+      12.5%   { transform: translate(100px, -52px); }
+      17%     { transform: translate(125px, -35px); }
+      21%     { transform: translate(135px, -10px); }
+      25%     { transform: translate(130px, 10px); }
+      29%     { transform: translate(115px, 30px); }
+      33%     { transform: translate(90px, 48px); }
+      37.5%   { transform: translate(60px, 45px); }
+      42%     { transform: translate(30px, 28px); }
+      46%     { transform: translate(8px, 8px); }
+      50%     { transform: translate(0, 0); }
+      54%     { transform: translate(-30px, 28px); }
+      58%     { transform: translate(-65px, 48px); }
+      62.5%   { transform: translate(-100px, 45px); }
+      67%     { transform: translate(-125px, 30px); }
+      71%     { transform: translate(-135px, 10px); }
+      75%     { transform: translate(-130px, -10px); }
+      79%     { transform: translate(-115px, -35px); }
+      83%     { transform: translate(-90px, -48px); }
+      87.5%   { transform: translate(-60px, -52px); }
+      92%     { transform: translate(-30px, -28px); }
+      96%     { transform: translate(-8px, -8px); }
+      100%    { transform: translate(0, 0); }
     }
-    .loop-pulse {
+
+    /* Neural particles — stream of dots tracing the infinity */
+    .neural-particle {
       position: absolute;
-      width: 14px; height: 14px;
-      background: var(--purple);
       border-radius: 50%;
-      box-shadow: 0 0 12px var(--purple), 0 0 30px rgba(139,92,246,0.4), 0 0 60px rgba(139,92,246,0.2);
       top: 50%; left: 50%;
-      margin: -7px 0 0 -7px;
-      animation: orbit 4s linear infinite;
       z-index: 3;
+      animation: infinity-path 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+      pointer-events: none;
     }
-    .loop-pulse::after {
-      content: '';
-      position: absolute;
-      width: 8px; height: 8px;
-      background: rgba(139,92,246,0.5);
-      border-radius: 50%;
-      top: 3px; left: 3px;
-      box-shadow: 0 0 20px rgba(139,92,246,0.6);
-      animation: pulse-glow 1s ease-in-out infinite;
-    }
-    @keyframes orbit {
-      0%   { transform: rotate(0deg)   translateX(160px) rotate(0deg); }
-      100% { transform: rotate(360deg) translateX(160px) rotate(-360deg); }
-    }
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 0.5; transform: scale(1); }
-      50%      { opacity: 1;   transform: scale(1.5); }
-    }
-    .loop-pulse-2 {
-      position: absolute;
-      width: 10px; height: 10px;
+    /* Lead particle — red (Forge/Attack side) */
+    .np-1 {
+      width: 12px; height: 12px;
+      margin: -6px 0 0 -6px;
       background: var(--red);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--red), 0 0 25px rgba(239,68,68,0.3);
-      top: 50%; left: 50%;
-      margin: -5px 0 0 -5px;
-      animation: orbit 4s linear infinite;
-      animation-delay: -2s;
-      z-index: 3;
-      opacity: 0.7;
+      box-shadow: 0 0 8px var(--red), 0 0 20px rgba(239,68,68,0.5), 0 0 40px rgba(239,68,68,0.2);
+      animation-delay: 0s;
+    }
+    /* Trail particles — red fade */
+    .np-2 {
+      width: 8px; height: 8px;
+      margin: -4px 0 0 -4px;
+      background: var(--red);
+      box-shadow: 0 0 6px rgba(239,68,68,0.6);
+      opacity: 0.6;
+      animation-delay: -0.2s;
+    }
+    .np-3 {
+      width: 6px; height: 6px;
+      margin: -3px 0 0 -3px;
+      background: var(--red);
+      box-shadow: 0 0 4px rgba(239,68,68,0.4);
+      opacity: 0.35;
+      animation-delay: -0.4s;
+    }
+    .np-4 {
+      width: 4px; height: 4px;
+      margin: -2px 0 0 -2px;
+      background: rgba(239,68,68,0.5);
+      opacity: 0.2;
+      animation-delay: -0.6s;
+    }
+    /* Lead particle — blue (Armory/Score side) */
+    .np-5 {
+      width: 12px; height: 12px;
+      margin: -6px 0 0 -6px;
+      background: var(--blue);
+      box-shadow: 0 0 8px var(--blue), 0 0 20px rgba(59,130,246,0.5), 0 0 40px rgba(59,130,246,0.2);
+      animation-delay: -2.5s;
+    }
+    /* Trail particles — blue fade */
+    .np-6 {
+      width: 8px; height: 8px;
+      margin: -4px 0 0 -4px;
+      background: var(--blue);
+      box-shadow: 0 0 6px rgba(59,130,246,0.6);
+      opacity: 0.6;
+      animation-delay: -2.7s;
+    }
+    .np-7 {
+      width: 6px; height: 6px;
+      margin: -3px 0 0 -3px;
+      background: var(--blue);
+      box-shadow: 0 0 4px rgba(59,130,246,0.4);
+      opacity: 0.35;
+      animation-delay: -2.9s;
+    }
+    .np-8 {
+      width: 4px; height: 4px;
+      margin: -2px 0 0 -2px;
+      background: rgba(59,130,246,0.5);
+      opacity: 0.2;
+      animation-delay: -3.1s;
     }
     .loop-feedback {
       text-align: center;
@@ -306,13 +360,35 @@
       padding-top: 0.75rem;
     }
     @media (max-width: 768px) {
-      .loop-container { width: 340px; height: 340px; }
-      .loop-logo { width: 140px; }
-      .loop-track { width: 220px; height: 220px; }
-      .loop-pulse, .loop-pulse-2 { animation-name: orbit-sm; }
-      @keyframes orbit-sm {
-        0%   { transform: rotate(0deg)   translateX(110px) rotate(0deg); }
-        100% { transform: rotate(360deg) translateX(110px) rotate(-360deg); }
+      .loop-container { width: 340px; height: 240px; }
+      .loop-logo { width: 190px; }
+      .neural-particle { animation-name: infinity-path-sm; }
+      @keyframes infinity-path-sm {
+        0%      { transform: translate(0, 0); }
+        4%      { transform: translate(20px, -19px); }
+        8%      { transform: translate(44px, -33px); }
+        12.5%   { transform: translate(68px, -35px); }
+        17%     { transform: translate(85px, -24px); }
+        21%     { transform: translate(92px, -7px); }
+        25%     { transform: translate(88px, 7px); }
+        29%     { transform: translate(78px, 20px); }
+        33%     { transform: translate(61px, 33px); }
+        37.5%   { transform: translate(41px, 31px); }
+        42%     { transform: translate(20px, 19px); }
+        46%     { transform: translate(5px, 5px); }
+        50%     { transform: translate(0, 0); }
+        54%     { transform: translate(-20px, 19px); }
+        58%     { transform: translate(-44px, 33px); }
+        62.5%   { transform: translate(-68px, 31px); }
+        67%     { transform: translate(-85px, 20px); }
+        71%     { transform: translate(-92px, 7px); }
+        75%     { transform: translate(-88px, -7px); }
+        79%     { transform: translate(-78px, -24px); }
+        83%     { transform: translate(-61px, -33px); }
+        87.5%   { transform: translate(-41px, -35px); }
+        92%     { transform: translate(-20px, -19px); }
+        96%     { transform: translate(-5px, -5px); }
+        100%    { transform: translate(0, 0); }
       }
       .loop-node { width: 90px; }
       .loop-node-icon { width: 40px; height: 40px; font-size: 1rem; }
@@ -433,10 +509,19 @@
 
     <div class="loop-section reveal">
       <div class="loop-container">
-        <div class="loop-track"></div>
+        <!-- Logo as the path -->
         <img src="assets/CLS_Logo.png" alt="CLS Labs" class="loop-logo"/>
-        <div class="loop-pulse"></div>
-        <div class="loop-pulse-2"></div>
+        <!-- Neural particle stream — red (attack side) -->
+        <div class="neural-particle np-1"></div>
+        <div class="neural-particle np-2"></div>
+        <div class="neural-particle np-3"></div>
+        <div class="neural-particle np-4"></div>
+        <!-- Neural particle stream — blue (defense side) -->
+        <div class="neural-particle np-5"></div>
+        <div class="neural-particle np-6"></div>
+        <div class="neural-particle np-7"></div>
+        <div class="neural-particle np-8"></div>
+        <!-- Nodes -->
         <div class="loop-node n-attack">
           <div class="loop-node-icon">&#x1F534;</div>
           <div class="loop-node-label">Attack</div>
