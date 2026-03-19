@@ -124,18 +124,18 @@
       line-height: 1.7;
     }
     /* ─── ANIMATED NEURAL LOOP ─── */
-    .loop-section { position: relative; padding: 3rem 0; }
+    .loop-section { position: relative; padding: 4rem 0; }
     .loop-container {
       position: relative;
-      width: 500px;
-      height: 340px;
+      width: 650px;
+      height: 440px;
       margin: 0 auto;
     }
     .loop-logo {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 280px;
+      width: 360px;
       opacity: 0.7;
       filter: drop-shadow(0 0 40px rgba(139,92,246,0.2));
     }
@@ -169,10 +169,10 @@
       margin-top: 0.15rem;
     }
     /* Nodes: Attack left (red), Classify top, Score right (blue), Remediate bottom */
-    .loop-node.n-attack    { top: 50%;  left: -30px; transform: translateY(-50%); }
-    .loop-node.n-classify  { top: -30px; left: 50%; transform: translateX(-50%); }
-    .loop-node.n-score     { top: 50%;  right: -30px; transform: translateY(-50%); }
-    .loop-node.n-remediate { bottom: -30px; left: 50%; transform: translateX(-50%); }
+    .loop-node.n-attack    { top: 50%;  left: -40px; transform: translateY(-50%); }
+    .loop-node.n-classify  { top: -40px; left: 50%; transform: translateX(-50%); }
+    .loop-node.n-score     { top: 50%;  right: -40px; transform: translateY(-50%); }
+    .loop-node.n-remediate { bottom: -40px; left: 50%; transform: translateX(-50%); }
     .n-attack .loop-node-icon    { background: rgba(239,68,68,0.12); color: var(--red); }
     .n-classify .loop-node-icon  { background: rgba(139,92,246,0.12); color: var(--purple); }
     .n-score .loop-node-icon     { background: rgba(59,130,246,0.12); color: var(--blue); }
@@ -181,33 +181,33 @@
     /* Figure-8 with color shift: RED on left → PURPLE on right */
     @keyframes neural-red-purple {
       0%      { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 8px #B84ECF, 0 0 20px rgba(184,78,207,0.4); }
-      4%      { transform: translate(30px, -28px); background: var(--purple); box-shadow: 0 0 8px var(--purple), 0 0 20px rgba(139,92,246,0.5); }
-      12.5%   { transform: translate(100px, -52px); }
-      25%     { transform: translate(130px, 10px); }
-      37.5%   { transform: translate(60px, 45px); }
-      46%     { transform: translate(8px, 8px); }
+      4%      { transform: translate(40px, -36px); background: var(--purple); box-shadow: 0 0 8px var(--purple), 0 0 20px rgba(139,92,246,0.5); }
+      12.5%   { transform: translate(130px, -68px); }
+      25%     { transform: translate(170px, 13px); }
+      37.5%   { transform: translate(78px, 59px); }
+      46%     { transform: translate(10px, 10px); }
       50%     { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 8px #B84ECF, 0 0 20px rgba(184,78,207,0.4); }
-      54%     { transform: translate(-30px, 28px); background: var(--red); box-shadow: 0 0 8px var(--red), 0 0 20px rgba(239,68,68,0.5); }
-      62.5%   { transform: translate(-100px, 45px); }
-      75%     { transform: translate(-130px, -10px); }
-      87.5%   { transform: translate(-60px, -52px); }
-      96%     { transform: translate(-8px, -8px); }
+      54%     { transform: translate(-40px, 36px); background: var(--red); box-shadow: 0 0 8px var(--red), 0 0 20px rgba(239,68,68,0.5); }
+      62.5%   { transform: translate(-130px, 59px); }
+      75%     { transform: translate(-170px, -13px); }
+      87.5%   { transform: translate(-78px, -68px); }
+      96%     { transform: translate(-10px, -10px); }
       100%    { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 8px #B84ECF, 0 0 20px rgba(184,78,207,0.4); }
     }
     /* Figure-8 with color shift: BLUE on right → GREEN on left */
     @keyframes neural-blue-green {
       0%      { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 8px #2EA8A0, 0 0 20px rgba(46,168,160,0.4); }
-      4%      { transform: translate(30px, -28px); background: var(--blue); box-shadow: 0 0 8px var(--blue), 0 0 20px rgba(59,130,246,0.5); }
-      12.5%   { transform: translate(100px, -52px); }
-      25%     { transform: translate(130px, 10px); }
-      37.5%   { transform: translate(60px, 45px); }
-      46%     { transform: translate(8px, 8px); }
+      4%      { transform: translate(40px, -36px); background: var(--blue); box-shadow: 0 0 8px var(--blue), 0 0 20px rgba(59,130,246,0.5); }
+      12.5%   { transform: translate(130px, -68px); }
+      25%     { transform: translate(170px, 13px); }
+      37.5%   { transform: translate(78px, 59px); }
+      46%     { transform: translate(10px, 10px); }
       50%     { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 8px #2EA8A0, 0 0 20px rgba(46,168,160,0.4); }
-      54%     { transform: translate(-30px, 28px); background: #22C55E; box-shadow: 0 0 8px #22C55E, 0 0 20px rgba(34,197,94,0.5); }
-      62.5%   { transform: translate(-100px, 45px); }
-      75%     { transform: translate(-130px, -10px); }
-      87.5%   { transform: translate(-60px, -52px); }
-      96%     { transform: translate(-8px, -8px); }
+      54%     { transform: translate(-40px, 36px); background: #22C55E; box-shadow: 0 0 8px #22C55E, 0 0 20px rgba(34,197,94,0.5); }
+      62.5%   { transform: translate(-130px, 59px); }
+      75%     { transform: translate(-170px, -13px); }
+      87.5%   { transform: translate(-78px, -68px); }
+      96%     { transform: translate(-10px, -10px); }
       100%    { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 8px #2EA8A0, 0 0 20px rgba(46,168,160,0.4); }
     }
 
@@ -221,8 +221,8 @@
     }
     /* Red→Purple stream (Attack left → Classify right) */
     .np-1 {
-      width: 12px; height: 12px;
-      margin: -6px 0 0 -6px;
+      width: 14px; height: 14px;
+      margin: -7px 0 0 -7px;
       animation: neural-red-purple 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
       animation-delay: 0s;
     }
@@ -249,8 +249,8 @@
     }
     /* Blue→Green stream (Score right → Remediate left) */
     .np-5 {
-      width: 12px; height: 12px;
-      margin: -6px 0 0 -6px;
+      width: 14px; height: 14px;
+      margin: -7px 0 0 -7px;
       animation: neural-blue-green 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
       animation-delay: -2.5s;
     }
@@ -362,39 +362,39 @@
       padding-top: 0.75rem;
     }
     @media (max-width: 768px) {
-      .loop-container { width: 340px; height: 240px; }
-      .loop-logo { width: 190px; }
+      .loop-container { width: 380px; height: 280px; }
+      .loop-logo { width: 220px; }
       .neural-particle { }
       .np-1, .np-2, .np-3, .np-4 { animation-name: neural-red-purple-sm; }
       .np-5, .np-6, .np-7, .np-8 { animation-name: neural-blue-green-sm; }
       @keyframes neural-red-purple-sm {
         0%      { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 6px #B84ECF; }
-        4%      { transform: translate(20px, -19px); background: var(--purple); box-shadow: 0 0 6px var(--purple); }
-        12.5%   { transform: translate(68px, -35px); }
-        25%     { transform: translate(88px, 7px); }
-        37.5%   { transform: translate(41px, 31px); }
-        46%     { transform: translate(5px, 5px); }
+        4%      { transform: translate(25px, -22px); background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+        12.5%   { transform: translate(80px, -42px); }
+        25%     { transform: translate(105px, 8px); }
+        37.5%   { transform: translate(48px, 36px); }
+        46%     { transform: translate(6px, 6px); }
         50%     { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 6px #B84ECF; }
-        54%     { transform: translate(-20px, 19px); background: var(--red); box-shadow: 0 0 6px var(--red); }
-        62.5%   { transform: translate(-68px, 31px); }
-        75%     { transform: translate(-88px, -7px); }
-        87.5%   { transform: translate(-41px, -35px); }
-        96%     { transform: translate(-5px, -5px); }
+        54%     { transform: translate(-25px, 22px); background: var(--red); box-shadow: 0 0 6px var(--red); }
+        62.5%   { transform: translate(-80px, 36px); }
+        75%     { transform: translate(-105px, -8px); }
+        87.5%   { transform: translate(-48px, -42px); }
+        96%     { transform: translate(-6px, -6px); }
         100%    { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 6px #B84ECF; }
       }
       @keyframes neural-blue-green-sm {
         0%      { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 6px #2EA8A0; }
-        4%      { transform: translate(20px, -19px); background: var(--blue); box-shadow: 0 0 6px var(--blue); }
-        12.5%   { transform: translate(68px, -35px); }
-        25%     { transform: translate(88px, 7px); }
-        37.5%   { transform: translate(41px, 31px); }
-        46%     { transform: translate(5px, 5px); }
+        4%      { transform: translate(25px, -22px); background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+        12.5%   { transform: translate(80px, -42px); }
+        25%     { transform: translate(105px, 8px); }
+        37.5%   { transform: translate(48px, 36px); }
+        46%     { transform: translate(6px, 6px); }
         50%     { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 6px #2EA8A0; }
-        54%     { transform: translate(-20px, 19px); background: #22C55E; box-shadow: 0 0 6px #22C55E; }
-        62.5%   { transform: translate(-68px, 31px); }
-        75%     { transform: translate(-88px, -7px); }
-        87.5%   { transform: translate(-41px, -35px); }
-        96%     { transform: translate(-5px, -5px); }
+        54%     { transform: translate(-25px, 22px); background: #22C55E; box-shadow: 0 0 6px #22C55E; }
+        62.5%   { transform: translate(-80px, 36px); }
+        75%     { transform: translate(-105px, -8px); }
+        87.5%   { transform: translate(-48px, -42px); }
+        96%     { transform: translate(-6px, -6px); }
         100%    { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 6px #2EA8A0; }
       }
       .loop-node { width: 90px; }
@@ -560,7 +560,7 @@
     <!-- ═══ 5. AIS SCORING ═══ -->
     <div class="section-header reveal" style="margin-top:3rem;">
       <h2 class="section-title">Adversarial Impact Scoring</h2>
-      <p class="section-desc">Not just breach or no breach. Five severity dimensions scored by three independent judges. The composite AIS tells you how bad it actually is.</p>
+      <p class="section-desc">Not just breach or no breach. Five severity dimensions scored by three independent judges. Calibrated across 25,000+ severity-graded findings from 200+ models. The composite AIS tells you how bad it actually is.</p>
     </div>
 
     <div class="ais-grid reveal">
@@ -669,18 +669,21 @@
         <h4 style="color:var(--purple);">Prompt Proxy</h4>
         <div class="deploy-oneliner">One URL change. Works with any LLM API.</div>
         <p>Drop-in sidecar proxy between your application and any model endpoint. Intercepts, classifies, and gates every request and response. No code changes. Swap the base URL, get defense.</p>
+        <p style="font-family:var(--font-mono); font-size:0.85rem; color:var(--purple); margin-bottom:1rem;">Starting at $499/mo</p>
         <div class="deploy-audience"><strong>For:</strong> Dev teams, startups, quick wins. You want defense today without re-architecting.</div>
       </div>
       <div class="deploy-card" style="border-top:3px solid var(--blue);">
         <h4 style="color:var(--blue);">Inter-Agent</h4>
         <div class="deploy-oneliner">Sits between agents in a pipeline.</div>
         <p>MCP-compatible proxy that inspects inter-agent communication, tool invocations, and cross-agent data flow. Catches contamination, privilege escalation, and tool injection across multi-agent systems.</p>
+        <p style="font-family:var(--font-mono); font-size:0.85rem; color:var(--blue); margin-bottom:1rem;">Starting at $2,500/mo</p>
         <div class="deploy-audience"><strong>For:</strong> Enterprise MCP deployments, multi-agent pipelines. You have agents talking to agents and need a trust boundary.</div>
       </div>
       <div class="deploy-card" style="border-top:3px solid #22C55E;">
         <h4 style="color:#22C55E;">Sovereign</h4>
         <div class="deploy-oneliner">Full stack. Your infrastructure. Your data.</div>
         <p>Complete CLAP deployment with eBPF kernel enforcement, on-prem classifier, continuous red team assessment, and closed-loop remediation. Air-gapped option available. Nothing leaves your network.</p>
+        <p style="font-family:var(--font-mono); font-size:0.85rem; color:#22C55E; margin-bottom:1rem;">Custom pricing</p>
         <div class="deploy-audience"><strong>For:</strong> Government, regulated industries, defense. You need provable containment and audit-ready compliance documentation.</div>
       </div>
     </div>
@@ -694,6 +697,7 @@
       <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
         <a href="services.html" class="btn btn-primary">Get an Assessment &rarr;</a>
         <a href="mailto:brandon@clsecuritylabs.com" class="btn btn-outline">Request a Demo</a>
+        <a href="research.html" class="btn btn-outline">Read the Research</a>
       </div>
     </div>
 
