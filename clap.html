@@ -127,15 +127,15 @@
     .loop-section { position: relative; padding: 4rem 0; }
     .loop-container {
       position: relative;
-      width: 650px;
-      height: 440px;
+      width: 800px;
+      height: 540px;
       margin: 0 auto;
     }
     .loop-logo {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 360px;
+      width: 460px;
       opacity: 0.7;
       filter: drop-shadow(0 0 40px rgba(139,92,246,0.2));
     }
@@ -169,10 +169,10 @@
       margin-top: 0.15rem;
     }
     /* Nodes: Attack left (red), Classify top, Score right (blue), Remediate bottom */
-    .loop-node.n-attack    { top: 50%;  left: -40px; transform: translateY(-50%); }
-    .loop-node.n-classify  { top: -40px; left: 50%; transform: translateX(-50%); }
-    .loop-node.n-score     { top: 50%;  right: -40px; transform: translateY(-50%); }
-    .loop-node.n-remediate { bottom: -40px; left: 50%; transform: translateX(-50%); }
+    .loop-node.n-attack    { top: 50%;  left: -50px; transform: translateY(-50%); }
+    .loop-node.n-classify  { top: -50px; left: 50%; transform: translateX(-50%); }
+    .loop-node.n-score     { top: 50%;  right: -50px; transform: translateY(-50%); }
+    .loop-node.n-remediate { bottom: -50px; left: 50%; transform: translateX(-50%); }
     .n-attack .loop-node-icon    { background: rgba(239,68,68,0.12); color: var(--red); }
     .n-classify .loop-node-icon  { background: rgba(139,92,246,0.12); color: var(--purple); }
     .n-score .loop-node-icon     { background: rgba(59,130,246,0.12); color: var(--blue); }
@@ -180,35 +180,35 @@
 
     /* Figure-8 with color shift: RED on left → PURPLE on right */
     @keyframes neural-red-purple {
-      0%      { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 8px #B84ECF, 0 0 20px rgba(184,78,207,0.4); }
-      4%      { transform: translate(40px, -36px); background: var(--purple); box-shadow: 0 0 8px var(--purple), 0 0 20px rgba(139,92,246,0.5); }
-      12.5%   { transform: translate(130px, -68px); }
-      25%     { transform: translate(170px, 13px); }
-      37.5%   { transform: translate(78px, 59px); }
-      46%     { transform: translate(10px, 10px); }
-      50%     { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 8px #B84ECF, 0 0 20px rgba(184,78,207,0.4); }
-      54%     { transform: translate(-40px, 36px); background: var(--red); box-shadow: 0 0 8px var(--red), 0 0 20px rgba(239,68,68,0.5); }
-      62.5%   { transform: translate(-130px, 59px); }
-      75%     { transform: translate(-170px, -13px); }
-      87.5%   { transform: translate(-78px, -68px); }
-      96%     { transform: translate(-10px, -10px); }
-      100%    { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 8px #B84ECF, 0 0 20px rgba(184,78,207,0.4); }
+      0%      { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 10px #B84ECF, 0 0 25px rgba(184,78,207,0.4); }
+      4%      { transform: translate(50px, -44px); background: var(--purple); box-shadow: 0 0 10px var(--purple), 0 0 25px rgba(139,92,246,0.5); }
+      12.5%   { transform: translate(160px, -84px); }
+      25%     { transform: translate(210px, 16px); }
+      37.5%   { transform: translate(96px, 73px); }
+      46%     { transform: translate(12px, 12px); }
+      50%     { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 10px #B84ECF, 0 0 25px rgba(184,78,207,0.4); }
+      54%     { transform: translate(-50px, 44px); background: var(--red); box-shadow: 0 0 10px var(--red), 0 0 25px rgba(239,68,68,0.5); }
+      62.5%   { transform: translate(-160px, 73px); }
+      75%     { transform: translate(-210px, -16px); }
+      87.5%   { transform: translate(-96px, -84px); }
+      96%     { transform: translate(-12px, -12px); }
+      100%    { transform: translate(0, 0); background: #B84ECF; box-shadow: 0 0 10px #B84ECF, 0 0 25px rgba(184,78,207,0.4); }
     }
     /* Figure-8 with color shift: BLUE on right → GREEN on left */
     @keyframes neural-blue-green {
-      0%      { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 8px #2EA8A0, 0 0 20px rgba(46,168,160,0.4); }
-      4%      { transform: translate(40px, -36px); background: var(--blue); box-shadow: 0 0 8px var(--blue), 0 0 20px rgba(59,130,246,0.5); }
-      12.5%   { transform: translate(130px, -68px); }
-      25%     { transform: translate(170px, 13px); }
-      37.5%   { transform: translate(78px, 59px); }
-      46%     { transform: translate(10px, 10px); }
-      50%     { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 8px #2EA8A0, 0 0 20px rgba(46,168,160,0.4); }
-      54%     { transform: translate(-40px, 36px); background: #22C55E; box-shadow: 0 0 8px #22C55E, 0 0 20px rgba(34,197,94,0.5); }
-      62.5%   { transform: translate(-130px, 59px); }
-      75%     { transform: translate(-170px, -13px); }
-      87.5%   { transform: translate(-78px, -68px); }
-      96%     { transform: translate(-10px, -10px); }
-      100%    { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 8px #2EA8A0, 0 0 20px rgba(46,168,160,0.4); }
+      0%      { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 10px #2EA8A0, 0 0 25px rgba(46,168,160,0.4); }
+      4%      { transform: translate(50px, -44px); background: var(--blue); box-shadow: 0 0 10px var(--blue), 0 0 25px rgba(59,130,246,0.5); }
+      12.5%   { transform: translate(160px, -84px); }
+      25%     { transform: translate(210px, 16px); }
+      37.5%   { transform: translate(96px, 73px); }
+      46%     { transform: translate(12px, 12px); }
+      50%     { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 10px #2EA8A0, 0 0 25px rgba(46,168,160,0.4); }
+      54%     { transform: translate(-50px, 44px); background: #22C55E; box-shadow: 0 0 10px #22C55E, 0 0 25px rgba(34,197,94,0.5); }
+      62.5%   { transform: translate(-160px, 73px); }
+      75%     { transform: translate(-210px, -16px); }
+      87.5%   { transform: translate(-96px, -84px); }
+      96%     { transform: translate(-12px, -12px); }
+      100%    { transform: translate(0, 0); background: #2EA8A0; box-shadow: 0 0 10px #2EA8A0, 0 0 25px rgba(46,168,160,0.4); }
     }
 
     /* Neural particles */
@@ -221,8 +221,8 @@
     }
     /* Red→Purple stream (Attack left → Classify right) */
     .np-1 {
-      width: 14px; height: 14px;
-      margin: -7px 0 0 -7px;
+      width: 16px; height: 16px;
+      margin: -8px 0 0 -8px;
       animation: neural-red-purple 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
       animation-delay: 0s;
     }
@@ -249,8 +249,8 @@
     }
     /* Blue→Green stream (Score right → Remediate left) */
     .np-5 {
-      width: 14px; height: 14px;
-      margin: -7px 0 0 -7px;
+      width: 16px; height: 16px;
+      margin: -8px 0 0 -8px;
       animation: neural-blue-green 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
       animation-delay: -2.5s;
     }
