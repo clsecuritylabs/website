@@ -380,7 +380,7 @@
 <div class="section reveal">
   <div class="section-tag purple">Technical Guide</div>
   <h2>What an Impact Assessment Actually Requires</h2>
-  <p class="section-desc">The law says you need an impact assessment. Here&rsquo;s what that means for your engineering team &mdash; not your legal team.</p>
+  <p class="section-desc">The law says you need an impact assessment. Here&rsquo;s what that means for your engineering team, not your legal team.</p>
 </div>
 
 <div class="body-text reveal">
@@ -394,7 +394,7 @@
 
 <div class="checklist reveal">
   <h3 style="color:var(--purple);">2. Data Description</h3>
-  <div class="check-item"><span class="check-icon">&#x1F4CA;</span> Describe the data the system processes: sources, types, whether it includes protected characteristics (race, sex, disability, age, veteran status, etc.), and how data quality is maintained. If you&rsquo;re using a third-party model via API, document what data you send to it and what data it returns. If you don&rsquo;t know what training data the model was trained on, document that you don&rsquo;t know &mdash; and note the risk.</div>
+  <div class="check-item"><span class="check-icon">&#x1F4CA;</span> Describe the data the system processes: sources, types, whether it includes protected characteristics (race, sex, disability, age, veteran status, etc.), and how data quality is maintained. If you&rsquo;re using a third-party model via API, document what data you send to it and what data it returns. If you don&rsquo;t know what training data the model was trained on, document that you don&rsquo;t know, and note the risk.</div>
 </div>
 
 <div class="checklist reveal">
@@ -404,17 +404,17 @@
 
 <div class="checklist reveal">
   <h3 style="color:var(--purple);">4. Algorithmic Discrimination Risk Analysis</h3>
-  <div class="check-item"><span class="check-icon">&#x26A0;</span> This is the core requirement. Analyze whether the system creates risks of unlawful differential treatment based on protected characteristics. For LLM-based systems, this means testing whether the model produces different outputs, recommendations, or decisions for different demographic groups. Standard safety benchmarks don&rsquo;t test this. You need targeted bias evaluation across protected classes &mdash; not just a Promptfoo pass rate.</div>
+  <div class="check-item"><span class="check-icon">&#x26A0;</span> This is the core requirement. Analyze whether the system creates risks of unlawful differential treatment based on protected characteristics. For LLM-based systems, this means testing whether the model produces different outputs, recommendations, or decisions for different demographic groups. Standard safety benchmarks don&rsquo;t test this. You need targeted bias evaluation across protected classes, not just a Promptfoo pass rate.</div>
 </div>
 
 <div class="checklist reveal">
   <h3 style="color:var(--purple);">5. Mitigation Steps</h3>
-  <div class="check-item"><span class="check-icon">&#x1F6E1;</span> Describe the steps you&rsquo;ve taken to mitigate identified risks. This is where your defense architecture matters. Input normalization, semantic classification, output gating, human-in-the-loop review &mdash; document what you deployed and how it performs. If your defense proxy reduces breach rates from 47% to 0%, that&rsquo;s your mitigation evidence. If you have no mitigations, document that too &mdash; and explain why.</div>
+  <div class="check-item"><span class="check-icon">&#x1F6E1;</span> Describe the steps you&rsquo;ve taken to mitigate identified risks. This is where your defense architecture matters. Input normalization, semantic classification, output gating, human-in-the-loop review, document what you deployed and how it performs. If your defense proxy reduces breach rates from 47% to 0%, that&rsquo;s your mitigation evidence. If you have no mitigations, document that too, and explain why.</div>
 </div>
 
 <div class="checklist reveal">
   <h3 style="color:var(--purple);">6. Post-Deployment Monitoring</h3>
-  <div class="check-item"><span class="check-icon">&#x1F50D;</span> Describe how you monitor the system after deployment for discrimination, drift, and new risks. Continuous monitoring is not optional &mdash; the law requires annual review at minimum. If your monitoring catches a problem, you have 90 days to notify the AG. If you don&rsquo;t have monitoring, you won&rsquo;t catch the problem, and you won&rsquo;t have the affirmative defense.</div>
+  <div class="check-item"><span class="check-icon">&#x1F50D;</span> Describe how you monitor the system after deployment for discrimination, drift, and new risks. Continuous monitoring is not optiona, the law requires annual review at minimum. If your monitoring catches a problem, you have 90 days to notify the AG. If you don&rsquo;t have monitoring, you won&rsquo;t catch the problem, and you won&rsquo;t have the affirmative defense.</div>
 </div>
 
 <div class="divider"></div>
@@ -429,7 +429,7 @@
 <div class="body-text reveal">
 <p><strong>Standard safety benchmarks test whether a model produces harmful text.</strong> They don&rsquo;t test whether a model treats protected groups differently. They don&rsquo;t test what happens when the model is connected to real tools. They don&rsquo;t test whether your defense stack actually works. And they don&rsquo;t produce the documentation the law requires.</p>
 
-<p>Our assessment of GPT-4.1 illustrates the gap: the model passes 84% of standard safety benchmarks, but when connected to enterprise tools via MCP, breach rates jump to 55&ndash;75%. A compliance program built on benchmark pass rates alone creates what we call the &ldquo;safety illusion&rdquo; &mdash; documentation that looks complete but doesn&rsquo;t actually test the risks the law is designed to address.</p>
+<p>Our assessment of GPT-4.1 illustrates the gap: the model passes 84% of standard safety benchmarks, but when connected to enterprise tools via MCP, breach rates jump to 55&ndash;75%. A compliance program built on benchmark pass rates alone creates what we call the &ldquo;safety illusion&rdquo;, documentation that looks complete but doesn&rsquo;t actually test the risks the law is designed to address.</p>
 </div>
 
 <div class="narrative reveal">
@@ -500,7 +500,7 @@
 <div class="checklist reveal">
   <h3 style="color:var(--green);">Weeks 9&ndash;10: Remediation</h3>
   <div class="check-item"><span class="check-icon">&#x1F527;</span> Deploy mitigations for identified risks. Document what you deployed, how it performs, and what residual risk remains.</div>
-  <div class="check-item"><span class="check-icon">&#x1F527;</span> Re-test after remediation to verify defenses work. This is the &ldquo;closed loop&rdquo; &mdash; the testing evidence that your mitigations actually reduce the documented risks.</div>
+  <div class="check-item"><span class="check-icon">&#x1F527;</span> Re-test after remediation to verify defenses work. This is the &ldquo;closed loop&rdquo;; the testing evidence that your mitigations actually reduce the documented risks.</div>
 </div>
 
 <div class="checklist reveal">
@@ -526,7 +526,7 @@
 <div class="body-text reveal">
 <p>You still have the general duty of reasonable care, and you still need to notify consumers when AI makes consequential decisions about them. But the documentation burden is significantly lighter.</p>
 
-<p>This exemption covers most startups and small businesses using off-the-shelf AI tools. If you&rsquo;re a 30-person company using an LLM-powered HR screening tool from a vendor, you don&rsquo;t need to complete your own impact assessment &mdash; but the vendor (as developer) does, and they need to provide you with the documentation to understand the system&rsquo;s risks.</p>
+<p>This exemption covers most startups and small businesses using off-the-shelf AI tools. If you&rsquo;re a 30-person company using an LLM-powered HR screening tool from a vendor, you don&rsquo;t need to complete your own impact assessment but the vendor (as developer) does, and they need to provide you with the documentation to understand the system&rsquo;s risks.</p>
 </div>
 
 <div class="divider"></div>
@@ -535,7 +535,7 @@
 <div class="cta-section reveal">
   <h2>Need Help With Your Impact Assessment?</h2>
   <p>CLS Security Labs provides the adversarial testing, bias evaluation, and compliance-mapped documentation that SB 24-205 impact assessments require. Every finding scored across five severity dimensions by three independent judges and mapped to NIST AI RMF, OWASP LLM Top 10, and MITRE ATLAS.</p>
-  <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem; max-width:600px; margin-left:auto; margin-right:auto;">Forge Assessments start at $2,500. Full CLAP Assessments &mdash; including remediation and re-verification &mdash; start at $15,000. Both produce audit-ready documentation for Colorado AG compliance. Not sure if your AI systems qualify as high-risk under SB 24-205? <a href="mailto:brandon@clsecuritylabs.com" style="color:var(--purple);">Book a free 30-minute consultation</a> &mdash; we&rsquo;ll help you figure that out before you spend anything.</p>
+  <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem; max-width:600px; margin-left:auto; margin-right:auto;">Forge Assessments start at $2,500. Full CLAP Assessments, including remediation and re-verification, start at $15,000. Both produce audit-ready documentation for Colorado AG compliance. Not sure if your AI systems qualify as high-risk under SB 24-205? <a href="mailto:brandon@clsecuritylabs.com" style="color:var(--purple);">Book a free 30-minute consultation</a> &mdash; we&rsquo;ll help you figure that out before you spend anything.</p>
   <div>
     <a href="https://clsecuritylabs.com/services.html" class="cta-btn">Get an Assessment &rarr;</a>
     <a href="https://clsecuritylabs.com/research.html" class="cta-btn outline">View Our Research</a>
@@ -545,7 +545,7 @@
 <!-- ═══ DISCLAIMER ═══ -->
 <div class="narrative reveal" style="border-left-color: var(--text-dim); margin-top: 2rem;">
   <h3>Disclaimer</h3>
-  <p>This blog post is for informational purposes only and does not constitute legal advice. CLS Security Labs is not a law firm. The Colorado AI Act is subject to ongoing legislative revision &mdash; the repeal-and-replace bill referenced in this post may alter specific requirements. Organizations should consult qualified legal counsel for compliance guidance specific to their situation. CLS Labs provides the technical testing and documentation components of impact assessments, not legal interpretation.</p>
+  <p>This blog post is for informational purposes only and does not constitute legal advice. CLS Security Labs is not a law firm. The Colorado AI Act is subject to ongoing legislative revision. The repeal-and-replace bill referenced in this post may alter specific requirements. Organizations should consult qualified legal counsel for compliance guidance specific to their situation. CLS Labs provides the technical testing and documentation components of impact assessments, not legal interpretation.</p>
 </div>
 
 <!-- ═══ FOOTER ═══ -->
