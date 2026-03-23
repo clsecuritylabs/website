@@ -16,6 +16,10 @@
   flex-direction: column;
 }
 
+.tier-card .btn {
+  margin-top: auto;
+}
+
 .tier-card:hover {
   border-color: var(--border-hover);
   transform: translateY(-4px);
