@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colorado SB 24-205: What Your AI Impact Assessment Actually Requires — CLS Security Labs</title>
+<meta name="description" content="A technical guide to Colorado's AI Act impact assessment requirements. What the law says, what it means for your engineering team, and how to build a compliant testing program before the June 30, 2026 deadline."/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #C0392B;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --purple: #8B5CF6;
+    --bg: #0A0E17;
+    --surface: #111827;
+    --surface-2: #1A2236;
+    --text: #E5E7EB;
+    --text-muted: #8B949E;
+    --text-dim: #4B5563;
+    --border: rgba(255,255,255,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .report-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,14,23,0.9); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 48px;
+  }
+  .report-header .cls-mark {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .report-header .cls-mark a { color: var(--accent); text-decoration: none; }
+  .report-header .report-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--text-dim);
+  }
+  .report-header .pub-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--green);
+    border: 1px solid rgba(34,197,94,0.3);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+  }
+
+  .report-body { max-width: 900px; margin: 0 auto; padding: 5rem 2rem 4rem; }
+
+  .cover {
+    min-height: 60vh; display: flex; flex-direction: column;
+    justify-content: center; padding: 4rem 0;
+  }
+  .cover .model-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--amber);
+    margin-bottom: 1rem;
+    opacity: 0; animation: fadeIn 0.5s 0.2s forwards;
+  }
+  .cover h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeIn 0.5s 0.4s forwards;
+  }
+  .cover h1 .hl { color: var(--amber); }
+  .cover .cover-sub {
+    font-size: 1.1rem; color: var(--text-muted);
+    max-width: 700px; line-height: 1.8;
+    opacity: 0; animation: fadeIn 0.5s 0.6s forwards;
+  }
+  .cover .meta-strip {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    margin-top: 2.5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    opacity: 0; animation: fadeIn 0.5s 0.8s forwards;
+  }
+  .cover .meta-item { font-size: 0.78rem; color: var(--text-dim); }
+  .cover .meta-item strong { color: var(--text-muted); font-weight: 600; }
+
+  .section { padding: 3rem 0; }
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.2em;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .section-tag.amber { color: var(--amber); }
+  .section-tag.red { color: var(--accent); }
+  .section-tag.blue { color: var(--blue); }
+  .section-tag.purple { color: var(--purple); }
+  .section-tag.green { color: var(--green); }
+
+  h2 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    line-height: 1.15; margin-bottom: 0.5rem;
+  }
+  .section-desc {
+    font-size: 0.92rem; color: var(--text-muted);
+    max-width: 700px; margin-bottom: 2rem; line-height: 1.7;
+  }
+  .body-text {
+    font-size: 0.95rem; color: var(--text-muted);
+    line-height: 1.8; margin-bottom: 1.25rem; max-width: 750px;
+  }
+  .body-text strong { color: var(--text); }
+
+  .narrative {
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 1.5rem 2rem; margin: 2rem 0;
+  }
+  .narrative.amber { border-left-color: var(--amber); }
+  .narrative.blue { border-left-color: var(--blue); }
+  .narrative.purple { border-left-color: var(--purple); }
+  .narrative.green { border-left-color: var(--green); }
+  .narrative h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1rem; margin-bottom: 0.5rem;
+  }
+  .narrative p {
+    font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;
+  }
+
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 2rem; margin: 2rem 0;
+  }
+  .checklist h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1rem; margin-bottom: 1rem;
+  }
+  .check-item {
+    display: flex; gap: 0.75rem; align-items: flex-start;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-icon {
+    font-size: 0.8rem; margin-top: 0.15rem; flex-shrink: 0;
+  }
+
+  .timeline {
+    position: relative; padding-left: 2rem; margin: 2rem 0;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 6px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .tl-item {
+    position: relative; margin-bottom: 2rem;
+  }
+  .tl-item::before {
+    content: ''; position: absolute; left: -2rem; top: 0.35rem;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--amber); border: 2px solid var(--bg);
+  }
+  .tl-item.active::before { background: var(--accent); box-shadow: 0 0 8px rgba(192,57,43,0.5); }
+  .tl-item.future::before { background: var(--text-dim); }
+  .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .tl-title {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.95rem; margin-bottom: 0.25rem;
+  }
+  .tl-desc {
+    font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;
+  }
+
+  .comp-table {
+    width: 100%; border-collapse: collapse;
+    margin: 1.5rem 0; font-size: 0.82rem;
+  }
+  .comp-table th {
+    text-align: left; padding: 0.7rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-table td {
+    padding: 0.7rem 1rem; border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .comp-table td:first-child { font-weight: 600; color: var(--text); }
+  .comp-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .cta-section {
+    text-align: center; padding: 3rem 2rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; margin: 3rem 0;
+  }
+  .cta-section h2 { margin-bottom: 0.75rem; }
+  .cta-section p {
+    font-size: 0.95rem; color: var(--text-muted);
+    margin-bottom: 1.5rem; max-width: 550px; margin-left: auto; margin-right: auto;
+  }
+  .cta-btn {
+    display: inline-block; padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff; border-radius: 8px;
+    text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    transition: all 0.25s; margin: 0 0.5rem;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(139,92,246,0.3); }
+  .cta-btn.outline {
+    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+  }
+  .cta-btn.outline:hover { border-color: var(--purple); color: var(--text); }
+
+  .report-footer {
+    text-align: center; padding: 4rem 0 3rem;
+    border-top: 1px solid var(--border); margin-top: 3rem;
+  }
+  .report-footer .cls-brand {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .report-footer .cls-brand a { color: var(--accent); text-decoration: none; }
+  .report-footer .footer-sub {
+    font-size: 0.78rem; color: var(--text-dim);
+    margin-top: 0.3rem; font-style: italic;
+  }
+  .report-footer .footer-legal {
+    font-size: 0.7rem; color: var(--text-dim);
+    margin-top: 1.5rem; line-height: 1.7;
+  }
+  .report-footer .footer-legal a { color: var(--text-dim); text-decoration: underline; }
+
+  .divider { height: 1px; background: var(--border); margin: 3rem 0; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .report-body { padding: 4.5rem 1.2rem 3rem; }
+    .report-header { padding: 0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="report-header">
+  <div class="cls-mark"><a href="https://clsecuritylabs.com">CLS Security Labs</a></div>
+  <div class="report-id">CLS-2026-COMPLIANCE-001</div>
+  <div class="pub-badge">Public Research</div>
+</div>
+
+<div class="report-body">
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div class="model-tag">Compliance &amp; Governance &mdash; March 2026</div>
+  <h1>Colorado SB 24-205:<br><span class="hl">What Your AI Impact Assessment<br>Actually Requires</span></h1>
+  <p class="cover-sub">Colorado&rsquo;s AI Act takes effect June 30, 2026 &mdash; unless the legislature rewrites it first. A working group reached consensus on a repeal-and-replace plan on March 17. But the original law is still on the books. This is the technical guide to what compliance actually looks like, regardless of which version you&rsquo;re preparing for.</p>
+
+  <div class="meta-strip">
+    <div class="meta-item"><strong>Law:</strong> Colorado SB 24-205 (Colorado AI Act)</div>
+    <div class="meta-item"><strong>Effective:</strong> June 30, 2026</div>
+    <div class="meta-item"><strong>Status:</strong> Active &mdash; repeal-and-replace bill expected</div>
+    <div class="meta-item"><strong>Enforcement:</strong> AG exclusive authority</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 1. WHERE THINGS STAND ═══ -->
+<div class="section reveal">
+  <div class="section-tag amber">Current Status</div>
+  <h2>The Law Is Still on the Books</h2>
+  <p class="section-desc">Here&rsquo;s the timeline. Every attempt to amend, repeal, or gut SB 24-205 has failed. What passed was a five-month delay.</p>
+</div>
+
+<div class="timeline reveal">
+  <div class="tl-item">
+    <div class="tl-date">May 17, 2024</div>
+    <div class="tl-title">SB 24-205 signed into law</div>
+    <div class="tl-desc">Governor Polis signs with reservations. Urges legislators to &ldquo;significantly improve&rdquo; the law before it takes effect. Original effective date: February 1, 2026.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-date">May 2025</div>
+    <div class="tl-title">SB 25-318 amendment effort fails</div>
+    <div class="tl-desc">Senate Majority Leader Rodriguez introduces comprehensive amendments. Bill postponed indefinitely. Last-ditch delay attempt via unrelated bill also fails.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-date">August 2025</div>
+    <div class="tl-title">Special session &mdash; 150+ lobbyists, 4 bills, 1 outcome</div>
+    <div class="tl-desc">Four different bills introduced: full rewrite, total repeal, scope reduction, and minimal disclosure. Negotiations collapse over liability provisions. Rodriguez guts his own bill and replaces it with a find-and-replace: every &ldquo;February 1, 2026&rdquo; becomes &ldquo;June 30, 2026.&rdquo; That&rsquo;s it.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-date">August 28, 2025</div>
+    <div class="tl-title">SB 25B-004 signed &mdash; delay to June 30, 2026</div>
+    <div class="tl-desc">Five-month delay. No substantive changes. Every obligation, rebuttable presumption, and exemption remains unchanged.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-date">January 2026</div>
+    <div class="tl-title">2026 legislative session opens &mdash; no agreement</div>
+    <div class="tl-desc">Expected reforms don&rsquo;t materialize. Industry pushes for softening or repeal. Consumer groups push to preserve. No consensus.</div>
+  </div>
+  <div class="tl-item active">
+    <div class="tl-date">March 17, 2026</div>
+    <div class="tl-title">Governor&rsquo;s working group reaches consensus</div>
+    <div class="tl-desc">Polis announces that an assembled working group of industry and civil rights experts has reached unanimous agreement on a plan to rework the Colorado AI Act. Repeal-and-replace bill language expected publicly in late March.</div>
+  </div>
+  <div class="tl-item future">
+    <div class="tl-date">June 30, 2026</div>
+    <div class="tl-title">Current law takes effect &mdash; unless replaced</div>
+    <div class="tl-desc">If no replacement bill passes, the original SB 24-205 provisions become enforceable as written. AG enforcement begins.</div>
+  </div>
+</div>
+
+<div class="narrative amber reveal">
+  <h3>The Bottom Line</h3>
+  <p>The law may be rewritten. But it hasn&rsquo;t been rewritten yet. And every proposed replacement has preserved the core requirements: impact assessments, risk management programs, and consumer disclosures. If you&rsquo;re building for the original law, you&rsquo;re building for whatever comes next. The technical requirements are converging, not diverging.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 2. WHAT THE LAW REQUIRES ═══ -->
+<div class="section reveal">
+  <div class="section-tag red">Requirements</div>
+  <h2>What the Law Actually Says</h2>
+  <p class="section-desc">SB 24-205 creates obligations for two roles: <strong>developers</strong> (who build or substantially modify AI systems) and <strong>deployers</strong> (who use them to make consequential decisions). Most Colorado companies are deployers.</p>
+</div>
+
+<div class="reveal">
+<table class="comp-table">
+  <thead>
+    <tr><th>Requirement</th><th>Developer</th><th>Deployer</th><th>What It Means Technically</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Duty of reasonable care</td><td>&#x2714;</td><td>&#x2714;</td><td>Document that you tested for algorithmic discrimination. &ldquo;We didn&rsquo;t know&rdquo; is not a defense.</td></tr>
+    <tr><td>Impact assessment</td><td>&#x2714;</td><td>&#x2714;</td><td>Annual assessment + within 90 days of substantial modification. Must cover purpose, data, performance, discrimination risks, and mitigation steps.</td></tr>
+    <tr><td>Risk management program</td><td>&mdash;</td><td>&#x2714;</td><td>Documented policy with principles, processes, and personnel for identifying and mitigating discrimination risks.</td></tr>
+    <tr><td>Technical documentation</td><td>&#x2714;</td><td>&mdash;</td><td>Model cards, dataset cards, or impact assessments sufficient for deployers to complete their own assessments.</td></tr>
+    <tr><td>Public statement</td><td>&#x2714;</td><td>&#x2714;</td><td>Developers: published summary of high-risk systems and risk management. Deployers: website disclosure of high-risk AI use.</td></tr>
+    <tr><td>Consumer notice</td><td>&mdash;</td><td>&#x2714;</td><td>Before a consequential decision: disclose AI involvement, purpose, data sources, right to correct data, right to appeal.</td></tr>
+    <tr><td>Discrimination discovery</td><td>&#x2714;</td><td>&#x2714;</td><td>If you discover algorithmic discrimination, notify the AG within 90 days.</td></tr>
+    <tr><td>Annual review</td><td>&mdash;</td><td>&#x2714;</td><td>Yearly review of each deployed high-risk system to verify it&rsquo;s not causing discrimination.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="narrative reveal">
+  <h3>The Rebuttable Presumption</h3>
+  <p>Here&rsquo;s the incentive structure: if you comply with the law&rsquo;s requirements, there&rsquo;s a rebuttable presumption that you used reasonable care. Translation: if the AG comes knocking and you have documented impact assessments, a risk management program, and evidence of testing &mdash; you have a legal defense. If you don&rsquo;t, you don&rsquo;t. The law also provides an affirmative defense if you adopt NIST AI RMF or ISO/IEC 42001 and take steps to discover and correct violations.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 3. IMPACT ASSESSMENT DEEP DIVE ═══ -->
+<div class="section reveal">
+  <div class="section-tag purple">Technical Guide</div>
+  <h2>What an Impact Assessment Actually Requires</h2>
+  <p class="section-desc">The law says you need an impact assessment. Here&rsquo;s what that means for your engineering team &mdash; not your legal team.</p>
+</div>
+
+<div class="body-text reveal">
+<p>The impact assessment is the centerpiece of SB 24-205 compliance. It must be completed before or at first deployment, annually thereafter, and within 90 days of any substantial modification. The law specifies what it must contain. Here&rsquo;s each requirement translated into technical deliverables:</p>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--purple);">1. Purpose and Intended Use</h3>
+  <div class="check-item"><span class="check-icon">&#x1F4CB;</span> Document the system&rsquo;s purpose, the decisions it influences, and the population affected. This is your system design document, not marketing copy. &ldquo;AI-powered hiring assistant&rdquo; is not sufficient. &ldquo;LLM-based resume screening system that filters applications for engineering roles based on keyword matching and semantic similarity, influencing which candidates proceed to human review&rdquo; is.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--purple);">2. Data Description</h3>
+  <div class="check-item"><span class="check-icon">&#x1F4CA;</span> Describe the data the system processes: sources, types, whether it includes protected characteristics (race, sex, disability, age, veteran status, etc.), and how data quality is maintained. If you&rsquo;re using a third-party model via API, document what data you send to it and what data it returns. If you don&rsquo;t know what training data the model was trained on, document that you don&rsquo;t know &mdash; and note the risk.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--purple);">3. Performance and Limitations</h3>
+  <div class="check-item"><span class="check-icon">&#x2699;</span> Document known performance metrics, error rates, and limitations. This is where adversarial testing results belong. If your model has a 55% breach rate when connected to tools, that&rsquo;s a documented limitation. If encoding bypass attacks succeed at 85%, that&rsquo;s a known risk. Performance documentation without adversarial testing is incomplete.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--purple);">4. Algorithmic Discrimination Risk Analysis</h3>
+  <div class="check-item"><span class="check-icon">&#x26A0;</span> This is the core requirement. Analyze whether the system creates risks of unlawful differential treatment based on protected characteristics. For LLM-based systems, this means testing whether the model produces different outputs, recommendations, or decisions for different demographic groups. Standard safety benchmarks don&rsquo;t test this. You need targeted bias evaluation across protected classes &mdash; not just a Promptfoo pass rate.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--purple);">5. Mitigation Steps</h3>
+  <div class="check-item"><span class="check-icon">&#x1F6E1;</span> Describe the steps you&rsquo;ve taken to mitigate identified risks. This is where your defense architecture matters. Input normalization, semantic classification, output gating, human-in-the-loop review &mdash; document what you deployed and how it performs. If your defense proxy reduces breach rates from 47% to 0%, that&rsquo;s your mitigation evidence. If you have no mitigations, document that too &mdash; and explain why.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--purple);">6. Post-Deployment Monitoring</h3>
+  <div class="check-item"><span class="check-icon">&#x1F50D;</span> Describe how you monitor the system after deployment for discrimination, drift, and new risks. Continuous monitoring is not optional &mdash; the law requires annual review at minimum. If your monitoring catches a problem, you have 90 days to notify the AG. If you don&rsquo;t have monitoring, you won&rsquo;t catch the problem, and you won&rsquo;t have the affirmative defense.</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 4. THE GAP ═══ -->
+<div class="section reveal">
+  <div class="section-tag red">The Problem</div>
+  <h2>What Most Organizations Are Missing</h2>
+  <p class="section-desc">The law requires testing for algorithmic discrimination. Most organizations are doing standard safety benchmarks. These are not the same thing.</p>
+</div>
+
+<div class="body-text reveal">
+<p><strong>Standard safety benchmarks test whether a model produces harmful text.</strong> They don&rsquo;t test whether a model treats protected groups differently. They don&rsquo;t test what happens when the model is connected to real tools. They don&rsquo;t test whether your defense stack actually works. And they don&rsquo;t produce the documentation the law requires.</p>
+
+<p>Our assessment of GPT-4.1 illustrates the gap: the model passes 84% of standard safety benchmarks, but when connected to enterprise tools via MCP, breach rates jump to 55&ndash;75%. A compliance program built on benchmark pass rates alone creates what we call the &ldquo;safety illusion&rdquo; &mdash; documentation that looks complete but doesn&rsquo;t actually test the risks the law is designed to address.</p>
+</div>
+
+<div class="narrative reveal">
+  <h3>What SB 24-205 Compliance Testing Actually Looks Like</h3>
+  <p>A compliant impact assessment needs adversarial testing across multiple dimensions: bias testing across protected classes, security testing for prompt injection and data exfiltration, tool-use testing if the system has tool access, cross-model comparison if you&rsquo;re evaluating alternatives, and defense verification if you&rsquo;ve deployed mitigations. Every finding needs to be reproducible, documented, and mapped to a recognized risk framework (NIST AI RMF or ISO/IEC 42001) to support the rebuttable presumption and affirmative defense.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 5. FRAMEWORK MAPPING ═══ -->
+<div class="section reveal">
+  <div class="section-tag blue">Compliance Mapping</div>
+  <h2>SB 24-205 &times; NIST AI RMF &times; OWASP &times; MITRE ATLAS</h2>
+  <p class="section-desc">The law points to NIST AI RMF and ISO/IEC 42001 for the affirmative defense. Here&rsquo;s how the requirements map across frameworks.</p>
+</div>
+
+<div class="reveal">
+<table class="comp-table">
+  <thead>
+    <tr><th>SB 24-205 Requirement</th><th>NIST AI RMF</th><th>OWASP LLM Top 10</th><th>MITRE ATLAS</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Algorithmic discrimination testing</td><td>MAP 2.3, MEASURE 2.6</td><td>LLM02: Output Handling</td><td>AML.T0048</td></tr>
+    <tr><td>Impact assessment</td><td>GOVERN 1.2, MAP 1.1</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>Risk management program</td><td>GOVERN 1.1&ndash;1.7</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>Prompt injection defense</td><td>MANAGE 2.1</td><td>LLM01: Prompt Injection</td><td>AML.T0051</td></tr>
+    <tr><td>Data exfiltration prevention</td><td>MANAGE 2.2</td><td>LLM06: Sensitive Info</td><td>AML.T0024</td></tr>
+    <tr><td>Tool-use security</td><td>MANAGE 3.1</td><td>LLM07: Insecure Plugin</td><td>AML.T0054</td></tr>
+    <tr><td>Post-deployment monitoring</td><td>MEASURE 4.1&ndash;4.3</td><td>LLM09: Overreliance</td><td>AML.T0043</td></tr>
+    <tr><td>Consumer disclosure</td><td>GOVERN 4.1</td><td>&mdash;</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="narrative blue reveal">
+  <h3>Why This Matters for the Affirmative Defense</h3>
+  <p>The law provides an affirmative defense for organizations that adopt NIST AI RMF or ISO/IEC 42001 <em>and</em> take steps to discover and correct violations. Adopting the framework without testing is not sufficient. Testing without adopting the framework is not sufficient. You need both: the governance structure and the technical evidence. Your impact assessment is the bridge between the two.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 6. COMPLIANCE ROADMAP ═══ -->
+<div class="section reveal">
+  <div class="section-tag green">Action Items</div>
+  <h2>The 90-Day Compliance Roadmap</h2>
+  <p class="section-desc">June 30 is ~100 days away. Here&rsquo;s the sequence.</p>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--green);">Weeks 1&ndash;2: Inventory</h3>
+  <div class="check-item"><span class="check-icon">&#x1F4E6;</span> Map every AI system that touches a consequential decision (employment, housing, healthcare, education, finance, insurance, legal services, government services). Include vendor tools embedded in HR platforms, underwriting systems, claims processing, and customer service.</div>
+  <div class="check-item"><span class="check-icon">&#x1F4E6;</span> For each system: identify whether you are a developer, deployer, or both. Identify the data processed, decisions influenced, and populations affected.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--green);">Weeks 3&ndash;4: Governance</h3>
+  <div class="check-item"><span class="check-icon">&#x1F4DC;</span> Adopt NIST AI RMF or ISO/IEC 42001 as your governance framework. Document the adoption. This is the foundation of your affirmative defense.</div>
+  <div class="check-item"><span class="check-icon">&#x1F4DC;</span> Draft your risk management policy: principles, processes, personnel, escalation procedures. Assign ownership for each high-risk system.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--green);">Weeks 5&ndash;8: Testing</h3>
+  <div class="check-item"><span class="check-icon">&#x1F6E1;</span> Conduct adversarial security assessments on each high-risk system. Test for bias across protected classes, prompt injection, data exfiltration, tool abuse, and output integrity.</div>
+  <div class="check-item"><span class="check-icon">&#x1F6E1;</span> If the system has tool access, test with tools connected. Standard benchmarks are necessary but not sufficient.</div>
+  <div class="check-item"><span class="check-icon">&#x1F6E1;</span> Document findings with reproduction rates, severity scores, and framework mappings (NIST, OWASP, MITRE).</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--green);">Weeks 9&ndash;10: Remediation</h3>
+  <div class="check-item"><span class="check-icon">&#x1F527;</span> Deploy mitigations for identified risks. Document what you deployed, how it performs, and what residual risk remains.</div>
+  <div class="check-item"><span class="check-icon">&#x1F527;</span> Re-test after remediation to verify defenses work. This is the &ldquo;closed loop&rdquo; &mdash; the testing evidence that your mitigations actually reduce the documented risks.</div>
+</div>
+
+<div class="checklist reveal">
+  <h3 style="color:var(--green);">Weeks 11&ndash;12: Documentation &amp; Monitoring</h3>
+  <div class="check-item"><span class="check-icon">&#x1F4DD;</span> Compile impact assessment for each high-risk system. Include purpose, data, performance, discrimination risk analysis, mitigation steps, and monitoring plan.</div>
+  <div class="check-item"><span class="check-icon">&#x1F4DD;</span> Prepare consumer-facing disclosures. Draft website notice of high-risk AI use. Prepare pre-decision and adverse-decision notification templates.</div>
+  <div class="check-item"><span class="check-icon">&#x1F4DD;</span> Establish continuous monitoring: schedule annual reviews, define substantial modification triggers for 90-day reassessment, and create AG notification procedures.</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 7. SMALL BUSINESS ═══ -->
+<div class="section reveal">
+  <div class="section-tag green">Exemptions</div>
+  <h2>The Small Business Exemption</h2>
+</div>
+
+<div class="narrative green reveal">
+  <h3>Under 50 Employees? Read This First.</h3>
+  <p>If you employ fewer than 50 full-time employees and you don&rsquo;t use your own data to train the high-risk AI system, you&rsquo;re exempt from the risk management program, impact assessment, and website disclosure requirements. Most of the documentation in this guide doesn&rsquo;t apply to you. We&rsquo;d rather you know that upfront than find out after paying for compliance work you didn&rsquo;t need.</p>
+</div>
+
+<div class="body-text reveal">
+<p>You still have the general duty of reasonable care, and you still need to notify consumers when AI makes consequential decisions about them. But the documentation burden is significantly lighter.</p>
+
+<p>This exemption covers most startups and small businesses using off-the-shelf AI tools. If you&rsquo;re a 30-person company using an LLM-powered HR screening tool from a vendor, you don&rsquo;t need to complete your own impact assessment &mdash; but the vendor (as developer) does, and they need to provide you with the documentation to understand the system&rsquo;s risks.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ CTA ═══ -->
+<div class="cta-section reveal">
+  <h2>Need Help With Your Impact Assessment?</h2>
+  <p>CLS Security Labs provides the adversarial testing, bias evaluation, and compliance-mapped documentation that SB 24-205 impact assessments require. Every finding scored across five severity dimensions by three independent judges and mapped to NIST AI RMF, OWASP LLM Top 10, and MITRE ATLAS.</p>
+  <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem; max-width:600px; margin-left:auto; margin-right:auto;">Forge Assessments start at $2,500. Full CLAP Assessments &mdash; including remediation and re-verification &mdash; start at $15,000. Both produce audit-ready documentation for Colorado AG compliance. Not sure if your AI systems qualify as high-risk under SB 24-205? <a href="mailto:brandon@clsecuritylabs.com" style="color:var(--purple);">Book a free 30-minute consultation</a> &mdash; we&rsquo;ll help you figure that out before you spend anything.</p>
+  <div>
+    <a href="https://clsecuritylabs.com/services.html" class="cta-btn">Get an Assessment &rarr;</a>
+    <a href="https://clsecuritylabs.com/research.html" class="cta-btn outline">View Our Research</a>
+  </div>
+</div>
+
+<!-- ═══ DISCLAIMER ═══ -->
+<div class="narrative reveal" style="border-left-color: var(--text-dim); margin-top: 2rem;">
+  <h3>Disclaimer</h3>
+  <p>This blog post is for informational purposes only and does not constitute legal advice. CLS Security Labs is not a law firm. The Colorado AI Act is subject to ongoing legislative revision &mdash; the repeal-and-replace bill referenced in this post may alter specific requirements. Organizations should consult qualified legal counsel for compliance guidance specific to their situation. CLS Labs provides the technical testing and documentation components of impact assessments, not legal interpretation.</p>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="report-footer">
+  <div class="cls-brand"><a href="https://clsecuritylabs.com">CLS Security Labs</a></div>
+  <div class="footer-sub">AI security assessment and remediation. Attack, verify, remediate, certify &mdash; in a closed loop.</div>
+  <div class="footer-legal">
+    &copy; 2026 CLS Security Labs LLC. Licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>.<br/>
+    <a href="https://clsecuritylabs.com/terms.html">Terms</a> &bull;
+    <a href="https://clsecuritylabs.com/privacy.html">Privacy</a> &bull;
+    <a href="https://clsecuritylabs.com/disclosure.html">Responsible Disclosure</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
