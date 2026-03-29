@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPT-4.1: What Standard Safety Tests Don't Show You — CLS Security Labs</title>
+<meta name="description" content="GPT-4.1 passes 84% of standard safety benchmarks. We tested it with 3,595 probes across 17 modules. The real breach rate is 55%."/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --accent: #C0392B;
+    --accent-light: #E74C3C;
+    --blue: #2563EB;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --purple: #8B5CF6;
+    --bg: #0A0E17;
+    --surface: #111827;
+    --surface-2: #1A2236;
+    --text: #E5E7EB;
+    --text-muted: #8B949E;
+    --text-dim: #4B5563;
+    --border: rgba(255,255,255,0.06);
+    --critical: #DC2626;
+    --high: #EA580C;
+    --moderate: #D97706;
+    --low: #22C55E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .report-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,14,23,0.9); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 48px;
+  }
+  .report-header .cls-mark {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .report-header .cls-mark a { color: var(--accent); text-decoration: none; }
+  .report-header .cls-mark a:hover { color: var(--accent-light); }
+  .report-header .report-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  .report-header .pub-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--green);
+    border: 1px solid rgba(34,197,94,0.3);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+  }
+
+  .report-body { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem 4rem; }
+
+  .cover {
+    min-height: 75vh; display: flex; flex-direction: column;
+    justify-content: center; position: relative;
+    padding: 4rem 0;
+  }
+  .cover::before {
+    content: ''; position: absolute;
+    top: 15%; right: -10%; width: 500px; height: 500px;
+    background: radial-gradient(ellipse, rgba(192,57,43,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cover .model-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 1rem;
+    opacity: 0; animation: fadeIn 0.5s 0.2s forwards;
+  }
+  .cover h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.1; letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeIn 0.5s 0.4s forwards;
+  }
+  .cover h1 .hl { color: var(--accent); }
+  .cover .cover-sub {
+    font-size: 1.1rem; color: var(--text-muted);
+    max-width: 640px; line-height: 1.7;
+    opacity: 0; animation: fadeIn 0.5s 0.6s forwards;
+  }
+  .cover .cover-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem; flex-wrap: wrap;
+    opacity: 0; animation: fadeIn 0.5s 0.8s forwards;
+  }
+  .cover .cs { text-align: left; }
+  .cover .cs-val {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 2rem;
+  }
+  .cover .cs-val.red { color: var(--accent); }
+  .cover .cs-val.amber { color: var(--amber); }
+  .cover .cs-val.green { color: var(--green); }
+  .cover .cs-val.blue { color: var(--blue); }
+  .cover .cs-label {
+    font-size: 0.68rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .cover .meta-strip {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    margin-top: 3rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    opacity: 0; animation: fadeIn 0.5s 1s forwards;
+  }
+  .cover .meta-item {
+    font-size: 0.78rem; color: var(--text-dim);
+  }
+  .cover .meta-item strong { color: var(--text-muted); font-weight: 600; }
+
+  .section { padding: 4rem 0; }
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.2em;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .section-tag.red { color: var(--accent); }
+  .section-tag.blue { color: var(--blue); }
+  .section-tag.amber { color: var(--amber); }
+  .section-tag.purple { color: var(--purple); }
+
+  h2 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    line-height: 1.15; margin-bottom: 0.5rem;
+  }
+  .section-desc {
+    font-size: 0.92rem; color: var(--text-muted);
+    max-width: 700px; margin-bottom: 2rem; line-height: 1.65;
+  }
+
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .chart-wrap .chart-title {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.95rem; margin-bottom: 0.3rem;
+  }
+  .chart-wrap .chart-sub {
+    font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1rem;
+  }
+  .chart-wrap canvas { max-height: 400px; }
+
+  .two-charts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+
+  .callout-strip {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem; margin: 2rem 0;
+  }
+  .callout {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.5rem; text-align: center;
+  }
+  .callout .co-val {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 2.2rem; line-height: 1;
+  }
+  .callout .co-val.critical { color: var(--critical); }
+  .callout .co-val.high { color: var(--high); }
+  .callout .co-val.moderate { color: var(--moderate); }
+  .callout .co-val.good { color: var(--green); }
+  .callout .co-val.blue { color: var(--blue); }
+  .callout .co-label {
+    font-size: 0.7rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-top: 0.4rem;
+  }
+  .callout .co-context {
+    font-size: 0.75rem; color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+
+  .narrative {
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 1.5rem 2rem; margin: 2rem 0;
+  }
+  .narrative.blue { border-left-color: var(--blue); }
+  .narrative.amber { border-left-color: var(--amber); }
+  .narrative.purple { border-left-color: var(--purple); }
+  .narrative.green { border-left-color: var(--green); }
+  .narrative h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1rem; margin-bottom: 0.5rem;
+  }
+  .narrative p {
+    font-size: 0.88rem; color: var(--text-muted); line-height: 1.65;
+  }
+
+  .comp-table {
+    width: 100%; border-collapse: collapse;
+    margin: 1.5rem 0; font-size: 0.82rem;
+  }
+  .comp-table th {
+    text-align: left; padding: 0.7rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-table td {
+    padding: 0.7rem 1rem; border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .comp-table td:first-child { font-weight: 600; color: var(--text); }
+  .comp-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .rate-critical { color: var(--critical) !important; font-weight: 700; }
+  .rate-high { color: var(--high) !important; font-weight: 700; }
+  .rate-moderate { color: var(--moderate) !important; font-weight: 600; }
+  .rate-low { color: var(--green) !important; font-weight: 600; }
+
+  .tool-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
+  .tool-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.05em;
+    padding: 0.25rem 0.7rem; border-radius: 4px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .disclaimer-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+  }
+  .disclaimer-box h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text);
+  }
+  .disclaimer-box p {
+    font-size: 0.8rem; color: var(--text-muted);
+    line-height: 1.7; margin-bottom: 0.5rem;
+  }
+
+  .cta-section {
+    text-align: center; padding: 3rem 2rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; margin: 3rem 0;
+  }
+  .cta-section h2 { margin-bottom: 0.75rem; }
+  .cta-section p {
+    font-size: 0.95rem; color: var(--text-muted);
+    margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto;
+  }
+  .cta-btn {
+    display: inline-block; padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff; border-radius: 8px;
+    text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    transition: all 0.25s; margin: 0 0.5rem;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(139,92,246,0.3); }
+  .cta-btn.outline {
+    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+  }
+  .cta-btn.outline:hover { border-color: var(--purple); color: var(--text); }
+
+  .report-footer {
+    text-align: center; padding: 4rem 0 3rem;
+    border-top: 1px solid var(--border); margin-top: 3rem;
+  }
+  .report-footer .cls-brand {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .report-footer .cls-brand a { color: var(--accent); text-decoration: none; }
+  .report-footer .footer-sub {
+    font-size: 0.78rem; color: var(--text-dim);
+    margin-top: 0.3rem; font-style: italic;
+  }
+  .report-footer .footer-legal {
+    font-size: 0.7rem; color: var(--text-dim);
+    margin-top: 1.5rem; line-height: 1.7;
+  }
+  .report-footer .footer-legal a { color: var(--text-dim); text-decoration: underline; }
+
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 3rem 0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .report-body { padding: 4.5rem 1.2rem 3rem; }
+    .two-charts { grid-template-columns: 1fr; }
+    .callout-strip { grid-template-columns: 1fr 1fr; }
+    .cover .cover-stats { gap: 1.5rem; }
+    .report-header { padding: 0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER BAR -->
+<div class="report-header">
+  <div class="cls-mark"><a href="https://clsecuritylabs.com">CLS Security Labs</a></div>
+  <div class="report-id">CLS-2026-GPT41-PUB-001</div>
+  <div class="pub-badge">Public Research</div>
+</div>
+
+<div class="report-body">
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div class="model-tag">Public Research · March 2026</div>
+  <h1>GPT-4.1 Security Assessment<br><span class="hl">What Standard Safety Tests<br>Don&rsquo;t Show You</span></h1>
+  <p class="cover-sub">GPT-4.1 passes 84% of standard safety benchmarks. We tested it with 3,595 probes across 17 modules and 6 security domains. The real breach rate is 55%. Here&rsquo;s what the safety card doesn&rsquo;t tell you.</p>
+
+  <div class="cover-stats">
+    <div class="cs"><div class="cs-val red">55%</div><div class="cs-label">Overall Breach Rate</div></div>
+    <div class="cs"><div class="cs-val amber">3,595</div><div class="cs-label">Total Probes</div></div>
+    <div class="cs"><div class="cs-val blue">6</div><div class="cs-label">Independent Tools</div></div>
+    <div class="cs"><div class="cs-val green">15.7%</div><div class="cs-label">Benchmark Fail Rate</div></div>
+  </div>
+
+  <div class="meta-strip">
+    <div class="meta-item"><strong>Model:</strong> OpenAI GPT-4.1</div>
+    <div class="meta-item"><strong>Provider:</strong> OpenAI</div>
+    <div class="meta-item"><strong>Assessor:</strong> CLS Security Labs</div>
+    <div class="meta-item"><strong>Publication Tier:</strong> Courtesy, 7-day notification sent to OpenAI</div>
+    <div class="meta-item"><strong>Last Updated:</strong> March 23, 2026</div>
+  </div>
+
+  <div class="tool-badges" style="margin-top:1.5rem;">
+    <div class="tool-badge">Forge v3</div>
+    <div class="tool-badge">Garak (NVIDIA)</div>
+    <div class="tool-badge">Promptfoo</div>
+    <div class="tool-badge">PyRIT (Microsoft)</div>
+    <div class="tool-badge">Vision Forge</div>
+    <div class="tool-badge">MCP Services</div>
+  </div>
+</div>
+
+<!-- ═══ DISCLAIMER ═══ -->
+<div class="disclaimer-box reveal">
+  <h3>Research Disclaimer</h3>
+  <p><strong>Point-in-time results:</strong> All results reflect model behavior at the time of testing and may not reflect current model versions, post-deployment safety patches, or provider configuration changes.</p>
+  <p><strong>Methodology:</strong> Results are produced using CLS Labs Forge Engine, Garak (NVIDIA), PyRIT (Microsoft), and Promptfoo with cross-judge scoring (Gemini/Claude/Llama). Different tools, prompts, or scoring criteria may produce different results.</p>
+  <p><strong>No attack prompts:</strong> This publication includes breach rates by category and module, methodology descriptions, and general findings. It does not include specific attack prompts, payloads, or reproduction instructions.</p>
+  <p><strong>Authorized testing:</strong> All testing was conducted against publicly available API endpoints under CLS Labs&rsquo; own accounts, in accordance with OpenAI&rsquo;s terms of service.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 1. THE SAFETY ILLUSION ═══ -->
+<div class="section reveal">
+  <div class="section-tag red">Finding 1</div>
+  <h2>The Safety Illusion</h2>
+  <p class="section-desc">Standard safety benchmarks report a 15.7% fail rate. Enterprise buyers see this and deploy with confidence. Our testing reveals the real risk is 3.5&times; higher.</p>
+</div>
+
+<div class="chart-wrap reveal">
+  <div class="chart-title">Breach Rate: Benchmark vs. Operational Reality</div>
+  <div class="chart-sub">Same model. Different question. Dramatically different answer.</div>
+  <canvas id="illusionChart" height="260"></canvas>
+</div>
+
+<div class="callout-strip reveal">
+  <div class="callout"><div class="co-val good">15.7%</div><div class="co-label">Promptfoo Benchmark</div><div class="co-context">What vendors report</div></div>
+  <div class="callout"><div class="co-val high">55%</div><div class="co-label">CLS Full Assessment</div><div class="co-context">What actually happens</div></div>
+  <div class="callout"><div class="co-val critical">70&ndash;85%</div><div class="co-label">With Tool Access</div><div class="co-context">MCP + encoding attacks</div></div>
+  <div class="callout"><div class="co-val blue">3.5&times;</div><div class="co-label">Risk Multiplier</div><div class="co-context">Benchmark &rarr; real world</div></div>
+</div>
+
+<div class="narrative reveal">
+  <h3>The 3.5&times; Gap</h3>
+  <p>GPT-4.1 scores 84.3% pass rate on Promptfoo&rsquo;s 950-test standard safety suite. That&rsquo;s the number on the safety card. That&rsquo;s the number procurement teams see. But when that same model is connected to real tools via MCP (the attack surface standard tests never measure), breach rates jump to 65&ndash;75%. Standard safety evaluations create a dangerous illusion of security.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 2. WHERE IT BREAKS ═══ -->
+<div class="section reveal">
+  <div class="section-tag red">Finding 2</div>
+  <h2>Where It Breaks</h2>
+  <p class="section-desc">17 Forge v3 modules tested. Results range from 5% (strong defense) to 85% (near-total failure). Here are the extremes. The full module-by-module breakdown is available in client assessments.</p>
+</div>
+
+<div class="chart-wrap reveal">
+  <div class="chart-title">Forge v3 &mdash; Breach Rate by Module</div>
+  <div class="chart-sub">Sorted by breach rate. Red = critical (&gt;70%), orange = high, amber = moderate, green = low.</div>
+  <canvas id="moduleChart" height="280"></canvas>
+</div>
+
+<div class="narrative reveal">
+  <h3>The Tool Access Multiplier</h3>
+  <p>The top 7 modules by breach rate all involve tool access, domain-specific context, or encoding evasion. MCP services average 70% breach rates. Domain-specific modules, testing the model as an industrial copilot and autonomous vehicle reasoner, produced breach rates of 65&ndash;72%. Meanwhile, the model&rsquo;s strongest defense (agent memory manipulation, 5%) is a purely text-based interaction. The pattern is unambiguous: the moment the model touches tools, safety collapses.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 3. CRITICAL FINDINGS ═══ -->
+<div class="section reveal">
+  <div class="section-tag red">Finding 3</div>
+  <h2>Three Critical Attack Surfaces</h2>
+  <p class="section-desc">Encoding bypass, MCP tool integration, and domain-specific attacks represent the highest-risk categories. Each exploits a different gap in the safety architecture.</p>
+</div>
+
+<div class="callout-strip reveal">
+  <div class="callout"><div class="co-val critical">85%</div><div class="co-label">Encoding Bypass</div><div class="co-context">Base64, ROT13, Unicode substitution</div></div>
+  <div class="callout"><div class="co-val critical">70%</div><div class="co-label">MCP Services (avg)</div><div class="co-context">Tool-connected agent attacks</div></div>
+  <div class="callout"><div class="co-val critical">72%</div><div class="co-label">Domain-Specific</div><div class="co-context">OT/ICS industrial copilot</div></div>
+</div>
+
+<div class="narrative purple reveal">
+  <h3>Encoding: The Universal Bypass</h3>
+  <p>Character-level encoding transformations (Base64, ROT13, Unicode homoglyphs, and similar techniques) achieve an 85% breach rate. These are not sophisticated attacks. They&rsquo;re the equivalent of writing a harmful request in pig latin and watching the safety training ignore it. This category has the highest breach rate of any module tested.</p>
+</div>
+
+<div class="narrative reveal">
+  <h3>MCP: When Agents Have Real Tools</h3>
+  <p>MCP service integrations, the layer connecting AI agents to enterprise tools, represent the single largest operational attack surface. When GPT-4.1 is connected to communication platforms, code repositories, and email systems via MCP, breach rates average 70% across services. The model performs actions it would refuse to describe in text-only mode. The gap between what a model says and what it does is the entire risk.</p>
+</div>
+
+<div class="narrative amber reveal">
+  <h3>Domain-Specific: When AI Failures Produce Force</h3>
+  <p>When tested as an industrial copilot, GPT-4.1 generated code that bypasses safety interlocks in operational technology environments. The breach rate across OT/ICS probes was 72%. Autonomous vehicle reasoning probes achieved 65%. Supply chain poisoning attacks succeeded at 70%. These are domains where AI failures don&rsquo;t produce bad text. They produce physical consequences. Major industrial automation vendors ship AI copilots for these environments. Published adversarial testing results from those vendors remain scarce.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 4. SIX TOOLS ═══ -->
+<div class="section reveal">
+  <div class="section-tag blue">Finding 4</div>
+  <h2>Six Tools. One Conclusion.</h2>
+  <p class="section-desc">We tested GPT-4.1 with several tools in our arsenal. Each tool sees the model from a different angle. All six agree: the safety surface is thin.</p>
+</div>
+
+<div class="chart-wrap reveal">
+  <div class="chart-title">Breach / Fail Rate by Tool</div>
+  <div class="chart-sub">Each tool uses different methodology, attack strategy, and scoring. Convergence = signal.</div>
+  <canvas id="toolChart" height="280"></canvas>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 5. CROSS-MODEL ═══ -->
+<div class="section reveal">
+  <div class="section-tag blue">Context</div>
+  <h2>In Context: GPT-4.1 vs. the Field</h2>
+  <p class="section-desc">On standard benchmarks, GPT-4.1 is middle-of-pack. On operational testing, the gap between benchmark performance and real-world exploitability becomes clear.</p>
+</div>
+
+<table class="comp-table reveal">
+  <thead>
+    <tr><th>Model</th><th>Promptfoo Fail%</th><th>Garak CLS ASR</th><th>OT Industrial</th><th>AV Reasoning</th><th>MCP</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Nemotron Super 120B</td><td class="rate-low">10.9%</td><td>&mdash;</td><td class="rate-moderate">40%</td><td class="rate-moderate">25%</td><td class="rate-moderate">50%</td></tr>
+    <tr><td>GPT-5.4</td><td class="rate-low">11.4%</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>GLM-5</td><td class="rate-low">11.5%</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td style="color:var(--accent);font-weight:800">GPT-4.1</td><td class="rate-moderate">15.7%</td><td class="rate-high">58&ndash;60%</td><td class="rate-critical">72%</td><td class="rate-critical">65%</td><td class="rate-critical">65&ndash;75%</td></tr>
+    <tr><td>GPT-4o</td><td class="rate-moderate">15.7%</td><td class="rate-moderate">44%</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>Grok 4.20</td><td class="rate-moderate">21.7%</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>Llama 70B</td><td class="rate-high">25.3%</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<div class="narrative blue reveal">
+  <h3>Benchmark &ne; Security</h3>
+  <p>GPT-4.1 and GPT-4o have identical Promptfoo fail rates (15.7%). But on Garak&rsquo;s CLS taxonomy, GPT-4.1&rsquo;s attack success rate is 58&ndash;60% vs GPT-4o&rsquo;s 44%, a 34% increase in exploitability that standard benchmarks completely miss. On domain-specific attacks, GPT-4.1 is dramatically more compliant with dangerous requests than Nemotron 120B, despite having a better benchmark score.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 6. WHAT HELD ═══ -->
+<div class="section reveal">
+  <div class="section-tag" style="color:var(--green)">What Held</div>
+  <h2>Where the Model Defended</h2>
+  <p class="section-desc">Not everything broke. GPT-4.1 has genuine strengths, and understanding which defenses held reveals the architecture of future protections.</p>
+</div>
+
+<div class="callout-strip reveal">
+  <div class="callout"><div class="co-val good">5%</div><div class="co-label">Agent Memory</div><div class="co-context">Strongest module. 19/20 defended.</div></div>
+  <div class="callout"><div class="co-val good">15.7%</div><div class="co-label">Standard Benchmarks</div><div class="co-context">Middle-of-pack conventional.</div></div>
+  <div class="callout"><div class="co-val good">0%</div><div class="co-label">Direct Tool Abuse</div><div class="co-context">Complete refusal on explicit requests.</div></div>
+  <div class="callout"><div class="co-val good">25%</div><div class="co-label">Agent Identity</div><div class="co-context">Resists persona manipulation.</div></div>
+</div>
+
+<div class="narrative green reveal">
+  <h3>Strong on Direct. Weak on Indirect.</h3>
+  <p>GPT-4.1 consistently refuses direct requests for harmful tool actions. It also has robust memory manipulation defenses (5% breach). The weakness is indirect exploitation: encoding tricks that obscure intent, academic framing that recontextualizes harm, legitimate-looking requests that produce dangerous outputs as side effects, and multi-step tool chains where no single step looks malicious. The safety training catches the obvious ask. It misses the sophisticated approach.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ 7. METHODOLOGY ═══ -->
+<div class="section reveal">
+  <div class="section-tag blue">Methodology</div>
+  <h2>How We Tested</h2>
+  <p class="section-desc">Six independent tools. Three scoring judges. Five severity dimensions. No single vendor or methodology dependency.</p>
+</div>
+
+<table class="comp-table reveal">
+  <thead>
+    <tr><th>Tool</th><th>Probes</th><th>Method</th><th>Scoring</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Forge v3</td><td>300+</td><td>17 modules across 6 security domains. Generative attack variants.</td><td>Cross-judge (Gemini/Claude/Llama)</td></tr>
+    <tr><td>Garak</td><td>1,500+</td><td>CLS custom taxonomy. 9 probe classes. Two runs averaged.</td><td>Garak built-in detectors</td></tr>
+    <tr><td>Promptfoo</td><td>950</td><td>Standard red team evaluation suite.</td><td>Promptfoo evaluator</td></tr>
+    <tr><td>PyRIT</td><td>50+</td><td>5 vulnerability scenarios. Multi-turn orchestrated attacks.</td><td>Microsoft PyRIT scorer + review</td></tr>
+    <tr><td>Vision Forge</td><td>10+</td><td>Multimodal scenarios. Typographic injection.</td><td>Manual verification</td></tr>
+    <tr><td>MCP Services</td><td>60+</td><td>Enterprise service integrations. Real tool access.</td><td>Action verification + cross-judge</td></tr>
+  </tbody>
+</table>
+
+<div class="narrative blue reveal">
+  <h3>Scoring: Adversarial Impact Score (AIS)</h3>
+  <p>Every confirmed breach is scored across five dimensions: Compromise, Action Depth, Privilege, Persistence, and Evasion. Three independent judge vendors (Gemini, Claude, Llama) cross-validate every finding. No single-vendor bias. The composite AIS score determines severity: Critical (80+), High (60&ndash;79), Medium (40&ndash;59), Low (&lt;40). Full AIS methodology is documented on our <a href="https://clsecuritylabs.com/clap.html" style="color:var(--purple);">CLAP page</a>.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══ CTA ═══ -->
+<div class="cta-section reveal">
+  <h2>Want This Assessment for Your Deployment?</h2>
+  <p>CLS Security Labs runs full adversarial assessments against any LLM deployment, with real tools, real actions, and three-vendor judge validation. Every finding compliance-mapped to NIST AI RMF, OWASP LLM Top 10, and MITRE ATLAS.</p>
+  <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem; max-width:600px; margin-left:auto; margin-right:auto;">This blog presents aggregate findings. The full assessment includes per-module evidence, specific remediation guidance, AIS severity scoring, and compliance mappings, available as a <a href="https://clsecuritylabs.com/services.html#pricing" style="color:var(--purple);">Forge Assessment or Full CLAP Assessment</a>. Colorado-based organizations deploying GPT-4.1 for consequential decisions may require an <a href="https://clsecuritylabs.com/blog-colorado-sb24-205.html" style="color:var(--amber);">SB 24-205 impact assessment</a> before June 30, 2026.</p>
+  <div>
+    <a href="https://clsecuritylabs.com/services.html" class="cta-btn">Get an Assessment &rarr;</a>
+    <a href="https://clsecuritylabs.com/research.html" class="cta-btn outline">View All Research</a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="report-footer">
+  <div class="cls-brand"><a href="https://clsecuritylabs.com">CLS Security Labs</a></div>
+  <div class="footer-sub">AI security assessment and remediation. Attack, verify, remediate, certify. In a closed loop.</div>
+  <div class="footer-legal">
+    Research data &copy; 2026 CLS Security Labs LLC. Licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>.<br/>
+    Citation with attribution permitted. Commercial use requires written permission.<br/><br/>
+    <a href="https://clsecuritylabs.com/terms.html">Terms</a> &bull;
+    <a href="https://clsecuritylabs.com/privacy.html">Privacy</a> &bull;
+    <a href="https://clsecuritylabs.com/disclosure.html">Responsible Disclosure</a>
+  </div>
+</div>
+
+</div><!-- .report-body -->
+
+<script>
+// ── CHART DEFAULTS ──
+Chart.defaults.color = '#8B949E';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.plugins.legend.display = false;
+Chart.defaults.plugins.tooltip.backgroundColor = '#1A2236';
+Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.titleFont = { family: "'Syne', sans-serif", weight: 700, size: 13 };
+Chart.defaults.plugins.tooltip.bodyFont = { family: "'JetBrains Mono', monospace", size: 11 };
+
+function rateColor(v) {
+  if (v >= 70) return '#DC2626';
+  if (v >= 50) return '#EA580C';
+  if (v >= 25) return '#D97706';
+  return '#22C55E';
+}
+
+// ── 1. SAFETY ILLUSION ──
+new Chart(document.getElementById('illusionChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Promptfoo\nBenchmark', 'Forge v3\n(Text Only)', 'Garak CLS\nTaxonomy', 'Forge v3\n(All Modules)', 'MCP\nServices', 'OT\nIndustrial', 'Encoding\nBypass'],
+    datasets: [{
+      data: [15.7, 37, 59, 55, 70, 72, 85],
+      backgroundColor: [15.7, 37, 59, 55, 70, 72, 85].map(rateColor),
+      borderRadius: 4,
+      barThickness: 40,
+    }]
+  },
+  options: {
+    indexAxis: 'x',
+    scales: {
+      y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      x: { grid: { display: false } }
+    },
+    plugins: { tooltip: { callbacks: { label: ctx => ctx.parsed.y + '% breach rate' } } }
+  }
+});
+
+// ── 2. MODULE BREAKDOWN ──
+const modules = [
+  { name: 'Encoding Bypass', rate: 85 },
+  { name: 'Refusal Inversion', rate: 75 },
+  { name: 'OT Industrial', rate: 72 },
+  { name: '11 additional modules', rate: 0, skip: true },
+  { name: 'Agent Identity', rate: 25 },
+  { name: 'Promptfoo Standard', rate: 15.7 },
+  { name: 'Agent Memory', rate: 5 },
+];
+
+new Chart(document.getElementById('moduleChart'), {
+  type: 'bar',
+  data: {
+    labels: modules.map(m => m.name),
+    datasets: [{
+      data: modules.map(m => m.skip ? null : m.rate),
+      backgroundColor: modules.map(m => m.skip ? 'transparent' : rateColor(m.rate)),
+      borderRadius: 3,
+      barThickness: 22,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    scales: {
+      x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { grid: { display: false }, ticks: { font: m => ({ size: 11, style: m.tick.label === '11 additional modules' ? 'italic' : 'normal' }) } }
+    },
+    plugins: { tooltip: { filter: ctx => ctx.parsed.x !== null, callbacks: { label: ctx => ctx.parsed.x + '% breach rate' } } }
+  }
+});
+
+// ── 3. TOOL CHART ──
+new Chart(document.getElementById('toolChart'), {
+  type: 'bar',
+  data: {
+    labels: ['MCP\nServices', 'Garak\nCLS', 'Forge\nv3', 'Vision\nForge', 'PyRIT', 'Promptfoo'],
+    datasets: [{
+      data: [71, 59, 55, 40, 18, 15.7],
+      backgroundColor: [71, 59, 55, 40, 18, 15.7].map(rateColor),
+      borderRadius: 4,
+      barThickness: 40,
+    }]
+  },
+  options: {
+    scales: {
+      y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
