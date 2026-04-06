@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Model Security Leaderboard | CLS Security Labs</title>
+  <meta name="description" content="AI model security rankings based on adversarial red team testing across 14 attack domains. Transparent, weighted scoring methodology."/>
+  <meta property="og:title" content="Model Security Leaderboard — CLS Security Labs"/>
+  <meta property="og:description" content="How secure is your AI model? See breach rates for 200+ models tested across 14 attack domains."/>
+  <link rel="stylesheet" href="css/style.css?v=5"/>
+  <link rel="icon" href="assets/logo.png" type="image/png"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    /* ── Leaderboard-specific styles ── */
+    .lb-stats { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin-bottom:3rem; }
+    .lb-stat { text-align:center; min-width:120px; }
+    .lb-stat-num { font-family:var(--font-mono); font-size:2rem; font-weight:700; background:linear-gradient(135deg,var(--red),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .lb-stat-label { font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; margin-top:0.25rem; }
+
+    .lb-controls { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
+    .lb-search { flex:1; min-width:200px; padding:10px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem; }
+    .lb-search:focus { outline:none; border-color:var(--purple); box-shadow:0 0 0 3px var(--purple-glow); }
+    .lb-search::placeholder { color:var(--text-muted); }
+    .lb-filter { padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:var(--text-secondary); font-family:var(--font-body); font-size:0.85rem; cursor:pointer; }
+    .lb-filter:hover, .lb-filter.active { border-color:var(--purple); color:var(--text-primary); background:rgba(139,92,246,0.05); }
+
+    .lb-table-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:12px; background:var(--bg-card); }
+    .lb-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .lb-table thead { background:var(--bg-secondary); }
+    .lb-table th { font-family:var(--font-mono); font-size:0.7rem; font-weight:500; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px; padding:0.8rem 1rem; text-align:left; border-bottom:1px solid var(--border); cursor:pointer; user-select:none; white-space:nowrap; }
+    .lb-table th:hover { color:var(--text-primary); }
+    .lb-table th.sorted-asc::after { content:' ▲'; font-size:0.6rem; }
+    .lb-table th.sorted-desc::after { content:' ▼'; font-size:0.6rem; }
+    .lb-table td { padding:0.7rem 1rem; border-bottom:1px solid var(--border); color:var(--text-secondary); vertical-align:middle; }
+    .lb-table tr:last-child td { border-bottom:none; }
+    .lb-table tr:hover td { background:rgba(139,92,246,0.03); }
+    .lb-table tr { cursor:pointer; }
+
+    .lb-rank { font-family:var(--font-mono); font-weight:700; color:var(--text-muted); min-width:36px; display:inline-block; text-align:center; }
+    .lb-rank.top3 { color:var(--red); }
+    .lb-model-name { font-weight:600; color:var(--text-primary); font-size:0.85rem; }
+    .lb-score { font-family:var(--font-mono); font-weight:700; font-size:0.95rem; }
+    .lb-score.critical { color:#EF4444; }
+    .lb-score.high { color:#F59E0B; }
+    .lb-score.moderate { color:#3B82F6; }
+    .lb-score.low { color:#22C55E; }
+
+    .lb-coverage { display:flex; gap:2px; align-items:center; }
+    .lb-coverage-bar { width:6px; height:14px; border-radius:2px; background:var(--border); }
+    .lb-coverage-bar.filled { background:var(--purple); }
+    .lb-coverage-label { font-family:var(--font-mono); font-size:0.65rem; color:var(--text-muted); margin-left:4px; text-transform:uppercase; }
+
+    .lb-severity { display:flex; gap:1px; height:14px; align-items:flex-end; }
+    .lb-severity-bar { width:10px; border-radius:1px 1px 0 0; min-height:2px; }
+
+    .lb-badge { display:inline-block; padding:2px 8px; border-radius:4px; font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.5px; }
+    .lb-badge.text { background:rgba(139,92,246,0.12); color:var(--purple); }
+    .lb-badge.agent { background:rgba(59,130,246,0.12); color:var(--blue); }
+    .lb-badge.infra { background:rgba(239,68,68,0.12); color:var(--red); }
+    .lb-badge.safety { background:rgba(255,179,0,0.12); color:#FFB300; }
+
+    /* Modal */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:2000; align-items:center; justify-content:center; padding:2rem; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--bg-primary); border:1px solid var(--border); border-radius:16px; max-width:800px; width:100%; max-height:90vh; overflow-y:auto; padding:2.5rem; position:relative; }
+    .modal-close { position:absolute; top:1rem; right:1.5rem; background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer; }
+    .modal-close:hover { color:var(--text-primary); }
+    .modal h2 { font-family:var(--font-display); font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; }
+    .modal-stats { display:flex; gap:1rem; flex-wrap:wrap; margin:1.5rem 0; }
+    .modal-stat { background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1rem 1.5rem; text-align:center; flex:1; min-width:100px; }
+    .modal-stat-num { font-family:var(--font-mono); font-size:1.5rem; font-weight:700; }
+    .modal-stat-label { font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1.5px; margin-top:0.25rem; }
+    .modal-chart-wrap { background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0; }
+    .modal-section { margin-top:2rem; }
+    .modal-section h3 { font-family:var(--font-display); font-size:1rem; font-weight:600; margin-bottom:1rem; }
+    .modal-risk-blocks { display:flex; gap:0.5rem; flex-wrap:wrap; }
+    .modal-risk-block { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:0.75rem 1rem; text-align:center; min-width:100px; }
+    .modal-risk-block-name { font-size:0.7rem; color:var(--text-muted); margin-bottom:0.25rem; }
+    .modal-risk-block-rate { font-family:var(--font-mono); font-weight:700; font-size:1.1rem; }
+
+    /* Email capture */
+    .capture-box { background:linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.08)); border:1px solid var(--border-hover); border-radius:12px; padding:2rem; margin-top:2rem; text-align:center; }
+    .capture-box h3 { font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin-bottom:0.5rem; }
+    .capture-box p { color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem; }
+    .capture-form { display:flex; gap:0.5rem; max-width:400px; margin:0 auto; }
+    .capture-form input { flex:1; padding:10px 14px; background:var(--bg-primary); border:1px solid var(--border); border-radius:8px; color:var(--text-primary); font-size:0.9rem; }
+    .capture-form input:focus { outline:none; border-color:var(--purple); }
+    .capture-form button { padding:10px 20px; }
+    .capture-success { display:none; color:var(--purple); font-family:var(--font-mono); font-size:0.85rem; margin-top:0.5rem; }
+
+    /* Upgrade CTA */
+    .upgrade-cta { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem; justify-content:center; }
+    .upgrade-card { background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1.5rem; text-align:center; min-width:180px; flex:1; max-width:220px; transition:all 0.3s; }
+    .upgrade-card:hover { border-color:var(--border-hover); transform:translateY(-3px); }
+    .upgrade-card .price { font-family:var(--font-mono); font-size:1.5rem; font-weight:700; color:var(--purple); }
+    .upgrade-card .price-label { font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem; }
+    .upgrade-card .desc { font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem; }
+
+    /* Methodology */
+    .method-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:1rem; margin-top:1.5rem; }
+    .method-card { background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:1.25rem; }
+    .method-card .weight { font-family:var(--font-mono); font-size:1.5rem; font-weight:700; }
+    .method-card .tier-name { font-size:0.8rem; color:var(--text-secondary); margin-top:0.25rem; }
+    .method-card .tier-desc { font-size:0.7rem; color:var(--text-muted); margin-top:0.5rem; }
+
+    /* Loading */
+    .lb-loading { text-align:center; padding:4rem; color:var(--text-muted); }
+    .lb-loading .spinner { display:inline-block; width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--purple); border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom:1rem; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .lb-count { font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="assets/logo.png" alt="CLS Labs"/> CLS LABS
+    </a>
+    <button class="nav-toggle">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+      <li><a href="clap.html">CLAP Protocol</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="repository.html">Repository</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="page-header">
+  <h1>Model Security <span style="background:linear-gradient(135deg,var(--red),var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Leaderboard</span></h1>
+  <p>How secure is your AI model? Ranked by real adversarial testing — not benchmarks.</p>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <!-- Stats bar -->
+    <div class="lb-stats reveal" id="lb-stats">
+      <div class="lb-stat"><div class="lb-stat-num" id="stat-models">—</div><div class="lb-stat-label">Models Tested</div></div>
+      <div class="lb-stat"><div class="lb-stat-num" id="stat-modules">—</div><div class="lb-stat-label">Attack Modules</div></div>
+      <div class="lb-stat"><div class="lb-stat-num" id="stat-probes">—</div><div class="lb-stat-label">Total Probes</div></div>
+      <div class="lb-stat"><div class="lb-stat-num" id="stat-domains">14</div><div class="lb-stat-label">Security Domains</div></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="lb-controls reveal">
+      <input class="lb-search" id="lb-search" type="text" placeholder="Search models... (e.g., GPT, Claude, Llama)"/>
+      <button class="lb-filter active" data-filter="all" onclick="filterCoverage('all',this)">All</button>
+      <button class="lb-filter" data-filter="FULL" onclick="filterCoverage('FULL',this)">Full Coverage</button>
+      <button class="lb-filter" data-filter="BROAD" onclick="filterCoverage('BROAD',this)">Broad+</button>
+      <span class="lb-count" id="lb-count"></span>
+    </div>
+
+    <!-- Table -->
+    <div class="lb-table-wrap reveal">
+      <div class="lb-loading" id="lb-loading">
+        <div class="spinner"></div>
+        <div>Loading leaderboard data...</div>
+      </div>
+      <table class="lb-table" id="lb-table" style="display:none">
+        <thead>
+          <tr>
+            <th data-col="rank" data-type="num" style="width:50px">#</th>
+            <th data-col="model" data-type="str">Model</th>
+            <th data-col="risk_score" data-type="num" style="text-align:center">Risk Score</th>
+            <th data-col="breach_rate" data-type="num" style="text-align:center">Breach Rate</th>
+            <th data-col="total_probes" data-type="num" style="text-align:center">Probes</th>
+            <th data-col="coverage_tier" data-type="str" style="text-align:center">Coverage</th>
+            <th data-col="median_ais" data-type="num" style="text-align:center">Severity</th>
+            <th style="text-align:center">Top Risks</th>
+          </tr>
+        </thead>
+        <tbody id="lb-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Email capture -->
+    <div class="capture-box reveal" id="capture-box">
+      <h3>Get Your Model's Risk Snapshot</h3>
+      <p>Free one-page report with breach rate, risk tier, and top 3 vulnerable categories.</p>
+      <div class="capture-form">
+        <input type="email" id="capture-email" placeholder="you@company.com"/>
+        <select id="capture-model" style="padding:10px 14px;background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:0.85rem;max-width:200px">
+          <option value="">Select model</option>
+        </select>
+        <button class="btn btn-primary" onclick="submitCapture()">Get Snapshot</button>
+      </div>
+      <div class="capture-success" id="capture-success">We'll email your report within 24 hours.</div>
+    </div>
+
+    <!-- Methodology -->
+    <div class="section-header reveal" style="margin-top:4rem">
+      <span class="section-label">Methodology</span>
+      <h2 class="section-title">How We Score</h2>
+      <p class="section-desc">Transparent, defensible, weighted by real-world consequence.</p>
+    </div>
+
+    <div class="method-grid reveal">
+      <div class="method-card">
+        <div class="weight" style="color:var(--purple)">1.0x</div>
+        <div class="tier-name">Text Attacks</div>
+        <div class="tier-desc">Prompt injection, jailbreaking, encoding bypass. Reputational impact.</div>
+      </div>
+      <div class="method-card">
+        <div class="weight" style="color:var(--blue)">1.5x</div>
+        <div class="tier-name">Agent Attacks</div>
+        <div class="tier-desc">Tool calling, action injection, cross-agent contamination. Operational impact.</div>
+      </div>
+      <div class="method-card">
+        <div class="weight" style="color:var(--red)">2.0x</div>
+        <div class="tier-name">Infrastructure</div>
+        <div class="tier-desc">MCP exploitation, containment escape, supply chain. Systemic impact.</div>
+      </div>
+      <div class="method-card">
+        <div class="weight" style="color:#FFB300">3.0x</div>
+        <div class="tier-name">Safety-Critical</div>
+        <div class="tier-desc">OT/ICS, autonomous vehicles, robotics. Kinetic impact.</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem" class="reveal">
+      <p style="color:var(--text-secondary);font-size:0.9rem;max-width:650px;margin:0 auto 1rem">
+        <strong>CLS Risk Score</strong> = Weighted Breach Rate &times; (1 + Severity Modifier)<br/>
+        <span style="font-size:0.8rem;color:var(--text-muted)">
+          Three independent AI judges cross-validate every finding. Coverage tier shows testing depth. All weights published.
+        </span>
+      </p>
+      <a href="research.html" class="btn btn-outline">Full Methodology &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- Model Detail Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-text">&copy; 2026 Closed Loop Security Labs LLC. All rights reserved.</span>
+      <ul class="footer-links">
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="disclosure.html">Security</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  CLS LEADERBOARD — Client-side rendering
+// ═══════════════════════════════════════════════════════════
+
+let LB = null;           // Leaderboard data
+let sortCol = 'rank';
+let sortDir = 'asc';
+let searchQ = '';
+let coverageFilter = 'all';
+
+const DATA_URL = 'https://storage.googleapis.com/cls-factory-data/leaderboard_data.json';
+
+function esc(s) { const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+function scoreClass(score) {
+  if (score >= 60) return 'critical';
+  if (score >= 40) return 'high';
+  if (score >= 20) return 'moderate';
+  return 'low';
+}
+
+function coverageBars(tier) {
+  const levels = {FULL:4, BROAD:3, PARTIAL:2, LIMITED:1};
+  const n = levels[tier] || 1;
+  let h = '<div class="lb-coverage">';
+  for (let i = 0; i < 4; i++) h += `<div class="lb-coverage-bar${i<n?' filled':''}"></div>`;
+  h += `<span class="lb-coverage-label">${tier}</span></div>`;
+  return h;
+}
+
+function severityBars(dist) {
+  if (!dist) return '<span style="font-size:0.7rem;color:var(--text-muted)">—</span>';
+  const total = dist.critical + dist.high + dist.medium + dist.low;
+  if (total === 0) return '—';
+  const pct = k => Math.max(2, (dist[k] / total) * 30);
+  return `<div class="lb-severity">
+    <div class="lb-severity-bar" style="height:${pct('low')}px;background:#22C55E" title="Low: ${dist.low}"></div>
+    <div class="lb-severity-bar" style="height:${pct('medium')}px;background:#3B82F6" title="Medium: ${dist.medium}"></div>
+    <div class="lb-severity-bar" style="height:${pct('high')}px;background:#F59E0B" title="High: ${dist.high}"></div>
+    <div class="lb-severity-bar" style="height:${pct('critical')}px;background:#EF4444" title="Critical: ${dist.critical}"></div>
+  </div>`;
+}
+
+function topRiskBadges(blocks) {
+  if (!blocks || !blocks.length) return '';
+  return blocks.slice(0, 2).map(b => {
+    const tier = b.rate >= 80 ? 'infra' : b.rate >= 50 ? 'agent' : 'text';
+    return `<span class="lb-badge ${tier}" title="${esc(b.name)}: ${b.rate}%">${esc(b.name.split('/')[0])}</span>`;
+  }).join(' ');
+}
+
+function shortModel(name) {
+  // Shorten "nvidia/llama-3.3-70b" style names
+  const parts = name.split('/');
+  return parts.length > 1 ? parts[parts.length - 1] : name;
+}
+
+function renderTable() {
+  let entries = LB.leaderboard.filter(e => {
+    if (searchQ && !e.model.toLowerCase().includes(searchQ)) return false;
+    if (coverageFilter !== 'all') {
+      const levels = {FULL:4, BROAD:3, PARTIAL:2, LIMITED:1};
+      const minLevel = levels[coverageFilter] || 1;
+      if ((levels[e.coverage_tier] || 1) < minLevel) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  entries.sort((a, b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (va == null) va = sortDir === 'asc' ? Infinity : -Infinity;
+    if (vb == null) vb = sortDir === 'asc' ? Infinity : -Infinity;
+    if (typeof va === 'string') { va = va.toLowerCase(); vb = (vb||'').toLowerCase(); }
+    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const tbody = document.getElementById('lb-body');
+  let h = '';
+  entries.forEach(e => {
+    h += `<tr onclick="openModel('${esc(e.model)}')">
+      <td><span class="lb-rank${e.rank<=3?' top3':''}">${e.rank}</span></td>
+      <td><span class="lb-model-name">${esc(shortModel(e.model))}</span>
+        ${e.providers?.length > 1 ? `<span style="font-size:0.65rem;color:var(--text-muted);margin-left:4px">${e.providers.length} providers</span>` : ''}
+      </td>
+      <td style="text-align:center"><span class="lb-score ${scoreClass(e.risk_score)}">${e.risk_score.toFixed(1)}</span></td>
+      <td style="text-align:center;font-family:var(--font-mono)">${e.breach_rate}%</td>
+      <td style="text-align:center;font-family:var(--font-mono);font-size:0.8rem">${e.total_probes.toLocaleString()}</td>
+      <td style="text-align:center">${coverageBars(e.coverage_tier)}</td>
+      <td style="text-align:center">${severityBars(e.severity_dist)}</td>
+      <td style="text-align:center">${topRiskBadges(e.top_risk_blocks)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = h;
+  document.getElementById('lb-count').textContent = `${entries.length} of ${LB.leaderboard.length} models`;
+}
+
+function sortTable(col, type) {
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = type === 'num' ? 'desc' : 'asc';
+  }
+  // Update header classes
+  document.querySelectorAll('.lb-table th').forEach(th => th.classList.remove('sorted-asc', 'sorted-desc'));
+  const th = document.querySelector(`.lb-table th[data-col="${col}"]`);
+  if (th) th.classList.add(sortDir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+  renderTable();
+}
+
+function filterCoverage(tier, btn) {
+  coverageFilter = tier;
+  document.querySelectorAll('.lb-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function openModel(name) {
+  const e = LB.leaderboard.find(x => x.model === name);
+  if (!e) return;
+  const mc = document.getElementById('modal-content');
+
+  let h = `<h2>${esc(shortModel(e.model))}</h2>`;
+  if (e.providers?.length) {
+    h += `<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem">
+      Providers: ${e.providers.map(p => esc(p)).join(', ')}
+    </div>`;
+  }
+  h += `<div style="font-size:0.7rem;color:var(--text-muted)">Last updated: ${LB.generated?.split('T')[0] || '—'} · ${e.total_probes.toLocaleString()} probes across ${e.modules_tested} modules</div>`;
+
+  // Stats row
+  h += `<div class="modal-stats">
+    <div class="modal-stat"><div class="modal-stat-num ${scoreClass(e.risk_score)}">${e.risk_score.toFixed(1)}</div><div class="modal-stat-label">Risk Score</div></div>
+    <div class="modal-stat"><div class="modal-stat-num" style="color:var(--red)">${e.breach_rate}%</div><div class="modal-stat-label">Breach Rate</div></div>
+    <div class="modal-stat"><div class="modal-stat-num" style="color:var(--text-primary)">${e.total_breaches.toLocaleString()}</div><div class="modal-stat-label">Breaches</div></div>
+    <div class="modal-stat"><div class="modal-stat-num" style="color:var(--purple)">${e.coverage_tier}</div><div class="modal-stat-label">Coverage (${e.coverage_pct}%)</div></div>
+    ${e.median_ais ? `<div class="modal-stat"><div class="modal-stat-num" style="color:var(--blue)">${e.median_ais}</div><div class="modal-stat-label">Median AIS</div></div>` : ''}
+  </div>`;
+
+  // Domain tier rates chart
+  if (e.tier_rates && Object.keys(e.tier_rates).length) {
+    h += `<div class="modal-chart-wrap"><canvas id="modal-tier-chart" height="200"></canvas></div>`;
+  }
+
+  // Block breakdown
+  if (e.block_rates && Object.keys(e.block_rates).length) {
+    h += `<div class="modal-section"><h3>Attack Domain Breakdown</h3><div class="modal-risk-blocks">`;
+    const blockNames = ${JSON.stringify(BLOCK_NAMES)};
+    Object.entries(e.block_rates).sort((a,b) => b[1] - a[1]).forEach(([bid, rate]) => {
+      const sc = rate >= 80 ? 'var(--red)' : rate >= 50 ? '#F59E0B' : rate >= 25 ? 'var(--blue)' : '#22C55E';
+      h += `<div class="modal-risk-block">
+        <div class="modal-risk-block-name">${esc(blockNames[bid] || 'Block '+bid)}</div>
+        <div class="modal-risk-block-rate" style="color:${sc}">${rate}%</div>
+      </div>`;
+    });
+    h += '</div></div>';
+  }
+
+  // Severity distribution
+  if (e.severity_dist) {
+    const d = e.severity_dist;
+    const total = d.critical + d.high + d.medium + d.low;
+    if (total > 0) {
+      h += `<div class="modal-section"><h3>Breach Severity Distribution</h3>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <div style="flex:1;min-width:60px;text-align:center"><div style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:#EF4444">${d.critical}</div><div style="font-size:0.7rem;color:var(--text-muted)">Critical</div></div>
+          <div style="flex:1;min-width:60px;text-align:center"><div style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:#F59E0B">${d.high}</div><div style="font-size:0.7rem;color:var(--text-muted)">High</div></div>
+          <div style="flex:1;min-width:60px;text-align:center"><div style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:#3B82F6">${d.medium}</div><div style="font-size:0.7rem;color:var(--text-muted)">Medium</div></div>
+          <div style="flex:1;min-width:60px;text-align:center"><div style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:#22C55E">${d.low}</div><div style="font-size:0.7rem;color:var(--text-muted)">Low</div></div>
+        </div>
+      </div>`;
+    }
+  }
+
+  // Upgrade CTA
+  h += `<div class="modal-section">
+    <h3>Want the Full Picture?</h3>
+    <div class="upgrade-cta">
+      <div class="upgrade-card">
+        <div class="price-label">Free</div>
+        <div class="price" style="color:#22C55E">$0</div>
+        <div class="desc">Risk Snapshot — 1 page, headline numbers</div>
+        <button class="btn btn-outline" style="font-size:0.8rem;padding:8px 16px" onclick="scrollToCapture()">Get Snapshot</button>
+      </div>
+      <div class="upgrade-card">
+        <div class="price-label">Detailed</div>
+        <div class="price">$99</div>
+        <div class="desc">Category Breakdown — 5 pages, every attack category</div>
+        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="#" onclick="buyReport('${esc(e.model)}',99)">Buy Report</a>
+      </div>
+      <div class="upgrade-card">
+        <div class="price-label">Intelligence</div>
+        <div class="price">$499</div>
+        <div class="desc">Full Report — 20 pages, AIS scores, compliance mapping</div>
+        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="#" onclick="buyReport('${esc(e.model)}',499)">Buy Report</a>
+      </div>
+    </div>
+  </div>`;
+
+  mc.innerHTML = h;
+  document.getElementById('modal-overlay').classList.add('open');
+
+  // Render tier chart
+  if (e.tier_rates && Object.keys(e.tier_rates).length) {
+    setTimeout(() => {
+      const ctx = document.getElementById('modal-tier-chart');
+      if (!ctx) return;
+      const labels = Object.keys(e.tier_rates);
+      const values = Object.values(e.tier_rates);
+      const colors = labels.map(l => {
+        if (l.includes('Safety')) return 'rgba(255,179,0,0.7)';
+        if (l.includes('Infra')) return 'rgba(239,68,68,0.7)';
+        if (l.includes('Agent')) return 'rgba(59,130,246,0.7)';
+        return 'rgba(139,92,246,0.7)';
+      });
+      new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets: [{ data: values, backgroundColor: colors, borderRadius: 6, barThickness: 40 }] },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false }, title: { display: true, text: 'Breach Rate by Domain Tier', color: '#A0A0B8', font: { family: 'JetBrains Mono', size: 11 } } },
+          scales: {
+            y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6B6B80', font: { family: 'JetBrains Mono', size: 10 }, callback: v => v + '%' } },
+            x: { grid: { display: false }, ticks: { color: '#A0A0B8', font: { family: 'JetBrains Mono', size: 10 } } }
+          }
+        }
+      });
+    }, 100);
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function scrollToCapture() {
+  closeModal();
+  document.getElementById('capture-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function submitCapture() {
+  const email = document.getElementById('capture-email').value.trim();
+  const model = document.getElementById('capture-model').value;
+  if (!email || !email.includes('@')) { alert('Enter a valid email'); return; }
+  if (!model) { alert('Select a model'); return; }
+
+  // TODO: Send to Cloud Function / Google Sheet / Mailchimp
+  // For now, log to console and show success
+  console.log('Lead captured:', { email, model });
+
+  // POST to webhook when ready:
+  // fetch('https://YOUR_CLOUD_FUNCTION_URL/capture', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({ email, model, source: 'leaderboard' })
+  // });
+
+  document.getElementById('capture-success').style.display = 'block';
+  document.querySelector('.capture-form').style.display = 'none';
+}
+
+function buyReport(model, price) {
+  // TODO: Redirect to Stripe checkout
+  // For now, redirect to services page
+  // When Stripe is ready:
+  // window.location.href = `https://checkout.stripe.com/...?model=${encodeURIComponent(model)}&tier=${price}`;
+  alert(`Report purchase: ${model} — $${price}\n\nStripe integration coming soon. Contact brandon@clsecuritylabs.com for reports.`);
+}
+
+// ── Sort handler ──
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.lb-table th[data-col]').forEach(th => {
+    th.addEventListener('click', () => sortTable(th.dataset.col, th.dataset.type));
+  });
+});
+
+// ── Search ──
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('lb-search');
+  let debounce;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => { searchQ = searchInput.value.trim().toLowerCase(); renderTable(); }, 200);
+  });
+});
+
+// ── Load data ──
+async function loadLeaderboard() {
+  try {
+    const r = await fetch(DATA_URL);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    LB = await r.json();
+  } catch (e) {
+    console.warn('GCS fetch failed, trying local:', e);
+    try {
+      const r2 = await fetch('data/leaderboard_data.json');
+      if (!r2.ok) throw new Error(`Local fetch failed: ${r2.status}`);
+      LB = await r2.json();
+    } catch (e2) {
+      document.getElementById('lb-loading').innerHTML = `
+        <div style="color:var(--red)">Failed to load leaderboard data</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem">${esc(e2.message)}</div>`;
+      return;
+    }
+  }
+
+  // Populate stats
+  document.getElementById('stat-models').textContent = LB.total_models.toLocaleString();
+  document.getElementById('stat-modules').textContent = LB.total_modules.toLocaleString();
+  document.getElementById('stat-probes').textContent = (LB.total_probes || 0).toLocaleString();
+
+  // Populate model selector
+  const sel = document.getElementById('capture-model');
+  LB.leaderboard.forEach(e => {
+    const opt = document.createElement('option');
+    opt.value = e.model;
+    opt.textContent = shortModel(e.model);
+    sel.appendChild(opt);
+  });
+
+  // Show table
+  document.getElementById('lb-loading').style.display = 'none';
+  document.getElementById('lb-table').style.display = '';
+  renderTable();
+}
+
+loadLeaderboard();
+
+// ── Reveal on scroll (from site main.js) ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Mobile nav ──
+document.querySelector('.nav-toggle')?.addEventListener('click', () => {
+  document.querySelector('.nav-links')?.classList.toggle('open');
+});
+
+// ── Keyboard: Escape closes modal ──
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
