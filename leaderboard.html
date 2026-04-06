@@ -406,7 +406,7 @@ function openModel(name) {
   // Block breakdown
   if (e.block_rates && Object.keys(e.block_rates).length) {
     h += `<div class="modal-section"><h3>Attack Domain Breakdown</h3><div class="modal-risk-blocks">`;
-    const blockNames = ${JSON.stringify(BLOCK_NAMES)};
+    const blockNames = {'1':'Text Jailbreaking','2':'Agent Exploitation','3':'Vision/Multimodal','4':'OT/ICS','5':'MCP Protocol','6':'Containment','7':'Robotics/VLA','8':'World Model','9':'AV Reasoning','10':'Supply Chain','11':'Audio','12':'RAG-Specific','13':'Inference Infra','14':'Alignment/RL'};
     Object.entries(e.block_rates).sort((a,b) => b[1] - a[1]).forEach(([bid, rate]) => {
       const sc = rate >= 80 ? 'var(--red)' : rate >= 50 ? '#F59E0B' : rate >= 25 ? 'var(--blue)' : '#22C55E';
       h += `<div class="modal-risk-block">
