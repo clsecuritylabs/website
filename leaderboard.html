@@ -440,14 +440,14 @@ function openModel(name) {
       <div class="upgrade-card">
         <div class="price-label">Free</div>
         <div class="price" style="color:#22C55E">$0</div>
-        <div class="desc">Risk Snapshot — 1 page, headline numbers</div>
+        <div class="desc">Risk Snapshot — 3 pages, risk score, breach rates, severity</div>
         <button class="btn btn-outline" style="font-size:0.8rem;padding:8px 16px" onclick="scrollToCapture()">Get Snapshot</button>
       </div>
       <div class="upgrade-card">
         <div class="price-label">Detailed</div>
-        <div class="price">$99</div>
-        <div class="desc">Category Breakdown — 5 pages, every attack category</div>
-        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="#" onclick="buyReport('${esc(e.model)}',99)">Buy Report</a>
+        <div class="price">$149</div>
+        <div class="desc">Category Breakdown — per-category rates, top findings, compliance mapping</div>
+        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="#" onclick="buyReport('${esc(e.model)}',149)">Buy Report</a>
       </div>
       <div class="upgrade-card">
         <div class="price-label">Intelligence</div>
@@ -520,16 +520,34 @@ async function submitCapture() {
     console.warn('Form submit error (may still succeed with no-cors):', e);
   }
 
+  // Store email for Stripe pre-fill on report purchases
+  try { localStorage.setItem('cls_capture_email', email); } catch(e) {}
+
   document.getElementById('capture-success').style.display = 'block';
   document.querySelector('.capture-form').style.display = 'none';
 }
 
+// ── Stripe Payment Links ──
+// Replace these with your actual Payment Link URLs from Stripe Dashboard
+const STRIPE_LINKS = {
+  149: 'https://buy.stripe.com/6oU28s4uT6pm8ojegX8Vi00',  // Model Category Breakdown Report
+  499: 'https://buy.stripe.com/00wdRa2mL296awr8WD8Vi01',  // Model Intelligence Report
+};
+
 function buyReport(model, price) {
-  // TODO: Redirect to Stripe checkout
-  // For now, redirect to services page
-  // When Stripe is ready:
-  // window.location.href = `https://checkout.stripe.com/...?model=${encodeURIComponent(model)}&tier=${price}`;
-  alert(`Report purchase: ${model} — $${price}\n\nStripe integration coming soon. Contact brandon@clsecuritylabs.com for reports.`);
+  const baseUrl = STRIPE_LINKS[price];
+  if (!baseUrl || baseUrl.startsWith('PASTE')) {
+    // Fallback until Payment Links are configured
+    window.location.href = `mailto:info@clsecuritylabs.com?subject=${encodeURIComponent(`Report Request: ${model} ($${price})`)}&body=${encodeURIComponent(`I'd like to purchase the $${price} report for ${model}.`)}`;
+    return;
+  }
+  // Stripe Payment Links accept client_reference_id and prefilled_email as query params
+  const email = localStorage.getItem('cls_capture_email') || '';
+  const params = new URLSearchParams({
+    client_reference_id: model,
+    ...(email && { prefilled_email: email }),
+  });
+  window.location.href = `${baseUrl}?${params.toString()}`;
 }
 
 // ── Sort handler ──

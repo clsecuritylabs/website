@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmed | Closed Loop Security Labs</title>
+  <meta name="description" content="Your report order has been received."/>
+  <link rel="stylesheet" href="css/style.css?v=5"/>
+  <link rel="icon" href="assets/logo.png" type="image/png"/>
+  <style>
+    .success-wrap {
+      max-width: 640px;
+      margin: 6rem auto 4rem;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .success-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    .success-wrap h1 {
+      font-family: var(--font-display, 'Inter', sans-serif);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--text-primary, #e8eaed);
+    }
+    .success-wrap p {
+      color: var(--text-secondary, #9ca3af);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .success-detail {
+      background: var(--bg-card, #1e2a3a);
+      border: 1px solid var(--border, #2e4057);
+      border-radius: 8px;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+    .success-detail h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-primary, #c0392b);
+      margin-bottom: 1rem;
+    }
+    .success-detail li {
+      color: var(--text-secondary, #9ca3af);
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      list-style: none;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .success-detail li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: #22c55e;
+    }
+    .success-actions {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="assets/logo.png" alt="CLS Labs"/> CLS LABS
+    </a>
+    <button class="nav-toggle">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="clap.html">CLAP Protocol</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="repository.html">Repository</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="success-wrap">
+  <span class="success-icon">&#10003;</span>
+  <h1>Order Confirmed</h1>
+  <p>Your report has been ordered. You'll receive a confirmation email from Stripe shortly.</p>
+
+  <div class="success-detail">
+    <h3>What happens next</h3>
+    <ul>
+      <li>Our team generates your report using the CLS Forge pipeline</li>
+      <li>Three-vendor cross-judge validation on all findings</li>
+      <li>Report delivered to your email within 24-48 hours</li>
+      <li>Questions? Reach us at info@clsecuritylabs.com</li>
+    </ul>
+  </div>
+
+  <div class="success-actions">
+    <a href="leaderboard.html" class="btn btn-outline">Back to Leaderboard</a>
+    <a href="services.html" class="btn btn-primary">View All Services</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-text">&copy; 2026 Closed Loop Security Labs LLC. All rights reserved.</span>
+      <ul class="footer-links">
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="disclosure.html">Security</a></li>
+        <li><a href="mailto:info@clsecuritylabs.com">Contact</a></li>
+        <li><a href="https://github.com/clsecuritylabs" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="js/main.js?v=3"></script>
+</body>
+</html>
