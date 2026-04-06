@@ -1,0 +1,12 @@
+# Scoring engine — stays on mini only
+generate_leaderboard.py
+refresh_leaderboard.sh
+
+# Environment / secrets
+.env
+*.key
+*.pem
+
+# OS junk
+.DS_Store
+Thumbs.db
