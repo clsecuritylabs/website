@@ -499,22 +499,26 @@ function scrollToCapture() {
   document.getElementById('capture-box').scrollIntoView({ behavior: 'smooth' });
 }
 
-function submitCapture() {
+async function submitCapture() {
   const email = document.getElementById('capture-email').value.trim();
   const model = document.getElementById('capture-model').value;
   if (!email || !email.includes('@')) { alert('Enter a valid email'); return; }
   if (!model) { alert('Select a model'); return; }
 
-  // TODO: Send to Cloud Function / Google Sheet / Mailchimp
-  // For now, log to console and show success
-  console.log('Lead captured:', { email, model });
+  const btn = document.querySelector('.capture-form button');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
 
-  // POST to webhook when ready:
-  // fetch('https://YOUR_CLOUD_FUNCTION_URL/capture', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ email, model, source: 'leaderboard' })
-  // });
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbwkbPEhTOnjQumVuRoEoHhOS0-T5wXI_z9mCp54-sHEmO9_T2I995CLTGMv-0VcI4lWOw/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ email, model, source: 'leaderboard', type: 'snapshot' })
+    });
+  } catch (e) {
+    console.warn('Form submit error (may still succeed with no-cors):', e);
+  }
 
   document.getElementById('capture-success').style.display = 'block';
   document.querySelector('.capture-form').style.display = 'none';
