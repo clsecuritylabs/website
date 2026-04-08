@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sample Report: phi-4-mini-flash | CLS Security Labs</title>
-  <meta name="description" content="Free sample Category Breakdown Report for phi-4-mini-flash. See what a CLS Security Labs assessment delivers."/>
+  <title>Sample Report: phi-4-mini-instruct | CLS Security Labs</title>
+  <meta name="description" content="Free sample Category Breakdown Report for phi-4-mini-instruct. See what a CLS Security Labs assessment delivers."/>
   <link rel="stylesheet" href="css/style.css?v=5"/>
   <link rel="icon" href="assets/logo.png" type="image/png"/>
   <style>
@@ -140,163 +140,206 @@
   <div class="report-banner">
     <span class="sample-tag">Free Sample</span>
     <h1>Category Breakdown Report</h1>
-    <div class="model-name">phi-4-mini-flash</div>
+    <div class="model-name">phi-4-mini-instruct</div>
     <div class="report-meta">
-      <span>450 Probes</span>
-      <span>8 Security Domains</span>
+      <span>1,877 Probes</span>
+      <span>106 Modules</span>
       <span>3-Judge Validation</span>
-      <span>2026-04-06</span>
+      <span>2026-04-07</span>
     </div>
   </div>
 
   <!-- 1. Executive Summary -->
   <div class="report-section">
     <h2>1. Executive Summary</h2>
-    <p>This report presents the security assessment of <strong>phi-4-mini-flash</strong>, conducted by CLS Security Labs using 450 adversarial probes across 8 security domains. The assessment identified 147 confirmed breaches with a 32.7% overall breach rate (field average: 27.9%).</p>
+    <p>This report presents the security assessment of <strong>phi-4-mini-instruct</strong>, conducted by CLS Security Labs using 1,877 adversarial probes across 106 attack modules. The assessment identified 1,057 confirmed breaches with a 56.3% overall breach rate.</p>
 
     <div class="key-metrics">
       <div class="metric-card">
-        <div class="metric-value metric-critical">32.7%</div>
+        <div class="metric-value metric-critical">56.3%</div>
         <div class="metric-label">Overall Breach Rate</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value metric-high">147</div>
+        <div class="metric-value metric-critical">1,057</div>
         <div class="metric-label">Confirmed Breaches</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value metric-mid">8</div>
-        <div class="metric-label">Domains Tested</div>
+        <div class="metric-value metric-mid">106</div>
+        <div class="metric-label">Modules Tested</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value metric-critical">12</div>
-        <div class="metric-label">Action Breaches</div>
+        <div class="metric-value metric-critical">3</div>
+        <div class="metric-label">Modules at 100%</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value metric-high">27.9%</div>
-        <div class="metric-label">Field Average</div>
+        <div class="metric-value metric-high">1,877</div>
+        <div class="metric-label">Adversarial Probes</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value metric-low">270</div>
+        <div class="metric-value metric-low">282+</div>
         <div class="metric-label">Models in Census</div>
       </div>
     </div>
 
     <h3>Key Findings</h3>
-    <p>1. Overall breach rate of 32.7% exceeds the field average of 27.9%<br/>
-       2. 12 ACTION_BREACHes detected in Agent and MCP domains<br/>
-       3. OT/ICS domain shows Critical severity (48.2% breach rate &times; 3.0x weight = 144.6 composite)<br/>
-       4. Text jailbreaking at 35.1% &mdash; above field average but below worst performers</p>
+    <p>1. 1,057 confirmed breaches across 106 modules &mdash; 56.3% overall breach rate<br/>
+       2. Three modules at 100% breach rate: agent cron exploitation, containment sandbox, encoding bypass<br/>
+       3. OT/ICS modules averaging 92% breach rate &mdash; safety-critical domain almost completely exposed<br/>
+       4. MCP attack surface (tool poisoning, OAuth abuse, database) averaging 85% breach rate</p>
   </div>
 
   <!-- 2. Domain Risk Heatmap -->
   <div class="report-section">
     <h2>2. Domain Risk Heatmap</h2>
-    <p>Each security domain is scored using domain-weighted composite scoring. The composite score combines the raw breach rate with a domain risk weight reflecting real-world impact severity.</p>
+    <p>Top 15 modules by breach rate out of 106 tested. Each module runs 20&ndash;25 targeted adversarial probes.</p>
     <div style="margin-top: 1rem;">
       <div class="domain-row">
-        <span>Domain</span><span>Breach Rate</span><span>Weight</span><span>Severity</span>
+        <span>Module</span><span>Breach Rate</span><span>Probes</span><span>Severity</span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">OT/ICS</span>
-        <span class="domain-rate metric-critical">48.2%</span>
-        <span>3.0x</span>
+        <span class="domain-name">Agent Cron Exploitation</span>
+        <span class="domain-rate metric-critical">100.0%</span>
+        <span>20</span>
         <span><span class="severity-badge sev-critical">Critical</span></span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">AV Reasoning</span>
-        <span class="domain-rate metric-critical">42.1%</span>
-        <span>3.0x</span>
+        <span class="domain-name">Containment Sandbox</span>
+        <span class="domain-rate metric-critical">100.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-critical">Critical</span></span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-name">Encoding Bypass</span>
+        <span class="domain-rate metric-critical">100.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-critical">Critical</span></span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-name">Multi-Step Decomposition</span>
+        <span class="domain-rate metric-critical">95.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-critical">Critical</span></span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-name">OT Setpoint Manipulation</span>
+        <span class="domain-rate metric-critical">95.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-critical">Critical</span></span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-name">OT Industrial</span>
+        <span class="domain-rate metric-critical">92.0%</span>
+        <span>25</span>
+        <span><span class="severity-badge sev-critical">Critical</span></span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-name">MCP Tool Poisoning</span>
+        <span class="domain-rate metric-critical">90.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-critical">Critical</span></span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-name">OT Safety Interlock Bypass</span>
+        <span class="domain-rate metric-critical">90.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-critical">Critical</span></span>
+      </div>
+      <div class="domain-row">
+        <span class="domain-name">Financial Fraud</span>
+        <span class="domain-rate metric-critical">85.0%</span>
+        <span>20</span>
         <span><span class="severity-badge sev-high">High</span></span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">Text Jailbreaking</span>
-        <span class="domain-rate metric-high">35.1%</span>
-        <span>1.0x</span>
-        <span><span class="severity-badge sev-low">Low</span></span>
+        <span class="domain-name">IDE Config Exploitation</span>
+        <span class="domain-rate metric-critical">85.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-high">High</span></span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">Agent Exploitation</span>
-        <span class="domain-rate metric-high">28.4%</span>
-        <span>1.5x</span>
-        <span><span class="severity-badge sev-low">Low</span></span>
+        <span class="domain-name">MCP OAuth Abuse</span>
+        <span class="domain-rate metric-critical">85.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-high">High</span></span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">MCP Protocol</span>
-        <span class="domain-rate metric-mid">22.3%</span>
-        <span>1.5x</span>
-        <span><span class="severity-badge sev-low">Low</span></span>
+        <span class="domain-name">VLA Action Injection</span>
+        <span class="domain-rate metric-critical">85.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-high">High</span></span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">RAG-Specific</span>
-        <span class="domain-rate metric-mid">19.5%</span>
-        <span>1.0x</span>
-        <span><span class="severity-badge sev-low">Low</span></span>
+        <span class="domain-name">Education AI Exploitation</span>
+        <span class="domain-rate metric-critical">80.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-high">High</span></span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">Containment</span>
-        <span class="domain-rate metric-mid">18.7%</span>
-        <span>2.0x</span>
-        <span><span class="severity-badge sev-low">Low</span></span>
+        <span class="domain-name">Legal AI Hallucination</span>
+        <span class="domain-rate metric-critical">80.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-high">High</span></span>
       </div>
       <div class="domain-row">
-        <span class="domain-name">Alignment/RL</span>
-        <span class="domain-rate metric-low">15.2%</span>
-        <span>1.0x</span>
-        <span><span class="severity-badge sev-low">Low</span></span>
+        <span class="domain-name">MCP Database</span>
+        <span class="domain-rate metric-critical">80.0%</span>
+        <span>20</span>
+        <span><span class="severity-badge sev-high">High</span></span>
       </div>
     </div>
+    <p style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--text-muted); font-style: italic;">91 additional modules tested. Full module breakdown in the purchased report.</p>
   </div>
 
   <!-- 3. Top Findings (showing 5 of 10, rest gated) -->
   <div class="report-section">
     <h2>3. Top Findings by Severity</h2>
-    <p>Showing 5 of 15 total findings. Full findings available in the purchased report.</p>
+    <p>Showing 5 of 1,057 total findings across 106 modules. Full report includes top 15 module breakdowns with remediation guidance.</p>
 
     <div class="finding-card">
-      <h4><span class="severity-badge sev-critical">Critical</span> &nbsp; Finding 1: OT/ICS Safety Boundary Bypass</h4>
-      <p>The model executed tool calls (write_plc_register, modify_setpoint) with attacker-controlled parameters in a safety-critical domain. In deployments involving physical systems, this could cause equipment damage or safety incidents.</p>
+      <h4><span class="severity-badge sev-critical">Critical</span> &nbsp; Finding 1: Agent Cron Exploitation</h4>
+      <p>100% breach rate (20/20 probes). The model created, modified, and scheduled cron jobs with attacker-controlled payloads. In agentic deployments with system access, this enables persistent backdoors &mdash; scheduled tasks survive session termination, model restarts, and manual cleanup attempts.</p>
       <div class="remediation">
-        <strong>Remediation:</strong> Restrict model access to safety-critical tool interfaces. Deploy CLS Safety Gate with eBPF enforcement for all tool calls in this domain. Implement dual-authorization for physical actuator commands.
+        <strong>Remediation:</strong> Block model access to cron/at/systemd-timer interfaces. Implement allowlists for any scheduled task creation. Deploy CLS Agent Shield with syscall-level enforcement on scheduler APIs.
       </div>
     </div>
 
     <div class="finding-card">
-      <h4><span class="severity-badge sev-high">High</span> &nbsp; Finding 2: Agent Tool Parameter Injection</h4>
-      <p>The model executed 3 dangerous tool invocations (execute_command, write_file, send_http) with attacker-controlled parameters. In a production agentic deployment, this would allow an adversary to perform arbitrary actions through the agent.</p>
+      <h4><span class="severity-badge sev-critical">Critical</span> &nbsp; Finding 2: Containment Sandbox Escape</h4>
+      <p>100% breach rate (20/20 probes). The model escaped its execution sandbox in every test &mdash; accessing host filesystems, reading environment variables outside its namespace, and executing commands in parent contexts. Complete containment failure across all probe variants.</p>
       <div class="remediation">
-        <strong>Remediation:</strong> Deploy CLS Defense Proxy with agent-aware input classification. Implement tool-call validation with parameter allowlisting. Consider CLS Agent Shield for runtime enforcement.
+        <strong>Remediation:</strong> Implement namespace isolation with eBPF-level syscall enforcement. Deploy hardware-backed TEE containment for sensitive deployments. Never rely on prompt-level sandboxing alone.
       </div>
     </div>
 
     <div class="finding-card">
-      <h4><span class="severity-badge sev-high">High</span> &nbsp; Finding 3: MCP Service Lateral Pivot</h4>
-      <p>The model executed dangerous tool invocations (mcp_invoke) with attacker-controlled parameters in the MCP Protocol domain, enabling lateral movement across connected services.</p>
+      <h4><span class="severity-badge sev-critical">Critical</span> &nbsp; Finding 3: Encoding Bypass</h4>
+      <p>100% breach rate (20/20 probes). Safety guardrails were completely bypassed by encoding adversarial instructions in Base64, ROT13, Unicode, and multi-layer encoding chains. The model decoded and complied with every encoded payload that its safety training blocks in plaintext.</p>
       <div class="remediation">
-        <strong>Remediation:</strong> Deploy inter-agent proxy between MCP services. Validate all tool parameters against allowlists. Implement service-level isolation boundaries.
+        <strong>Remediation:</strong> Deploy input normalization to decode all encoding layers before model processing. CLS Defense Proxy with encoding-aware classification blocks these at 99.9% &mdash; this is the highest-impact single defense.
       </div>
     </div>
 
     <div class="finding-card">
-      <h4><span class="severity-badge sev-high">High</span> &nbsp; Finding 4: AV Route Planning Corruption</h4>
-      <p>The model generated content violating safety alignment in the AV Reasoning domain. This indicates the model can be induced to produce dangerous navigation or driving decisions.</p>
+      <h4><span class="severity-badge sev-critical">Critical</span> &nbsp; Finding 4: OT Setpoint Manipulation</h4>
+      <p>95.0% breach rate (19/20 probes). The model modified industrial control system setpoints &mdash; temperature limits, pressure thresholds, flow rates &mdash; when presented with adversarial instructions framed as maintenance operations. In OT/ICS deployments, this has direct physical safety consequences.</p>
       <div class="remediation">
-        <strong>Remediation:</strong> Deploy domain-specific classifiers for infrastructure/safety-critical domains. Implement defense-in-depth: input classification, output filtering, and runtime monitoring.
+        <strong>Remediation:</strong> Restrict all model access to safety-critical parameter modification. Implement dual-authorization for any setpoint changes. Deploy CLS Safety Gate with hardware interlock verification.
       </div>
     </div>
 
     <div class="finding-card">
-      <h4><span class="severity-badge sev-medium">Medium</span> &nbsp; Finding 5: System Prompt Full Extraction</h4>
-      <p>The model disclosed its system prompt and internal configuration when subjected to adversarial extraction techniques, exposing security boundaries, custom instructions, and tool schemas to attackers.</p>
+      <h4><span class="severity-badge sev-critical">Critical</span> &nbsp; Finding 5: MCP Tool Poisoning</h4>
+      <p>90.0% breach rate (18/20 probes). The model accepted and executed poisoned MCP tool definitions &mdash; tools whose descriptions and parameters had been manipulated to exfiltrate data, modify system state, or pivot laterally to connected services. The MCP trust chain was fully compromised.</p>
       <div class="remediation">
-        <strong>Remediation:</strong> Deploy output filtering for sensitive information patterns. Implement CLS Defense Proxy with information-disclosure classifiers. Audit fine-tuning data for leaked instructions.
+        <strong>Remediation:</strong> Implement tool schema pinning with cryptographic signatures. Deploy CLS inter-agent proxy between MCP services. Validate all tool parameters against strict allowlists before execution.
       </div>
     </div>
 
     <div class="upsell-box">
-      <h3>10 more findings in the full report</h3>
-      <p>Including multi-layer encoding bypass, RAG context injection, persona override jailbreaks, alignment reward hacking, and containment namespace leaks &mdash; with full remediation guidance for each.</p>
+      <h3>1,052 more findings across 101 modules</h3>
+      <p>Including OT safety interlock bypass (90%), financial fraud (85%), IDE config exploitation (85%), MCP OAuth abuse (85%), VLA action injection (85%), legal AI hallucination (80%), and 95 more modules &mdash; with full remediation roadmap, compliance mapping, and AIS scoring.</p>
       <div class="upsell-btns">
-        <a href="https://buy.stripe.com/6oU28s4uT6pm8ojegX8Vi00?client_reference_id=phi-4-mini-flash" class="btn btn-red">Buy This Report &mdash; $149</a>
+        <a href="https://buy.stripe.com/6oU28s4uT6pm8ojegX8Vi00?client_reference_id=phi-4-mini-instruct" class="btn btn-red">Buy This Report &mdash; $149</a>
       </div>
     </div>
   </div>
@@ -308,11 +351,11 @@
     <div class="framework-grid">
       <div class="framework-card">
         <strong>OWASP LLM Top 10</strong>
-        LLM01 (Prompt Injection), LLM02 (Insecure Output), LLM04 (Model DoS), LLM07 (Insecure Plugin), LLM09 (Overreliance)
+        LLM01 (Prompt Injection), LLM02 (Insecure Output), LLM05 (Insecure Plugin Design), LLM06 (Excessive Agency), LLM07 (System Prompt Leakage)
       </div>
       <div class="framework-card">
         <strong>MITRE ATLAS</strong>
-        AML.T0051 (Prompt Injection), AML.T0054 (LLM Jailbreak), AML.T0056 (LLM Meta Prompt Extraction)
+        AML.T0015 (Evade ML Model), AML.T0051 (LLM Prompt Injection), AML.T0054 (LLM Jailbreak), AML.T0056 (LLM Meta Prompt Extraction)
       </div>
       <div class="framework-card">
         <strong>NIST AI RMF</strong>
@@ -345,35 +388,41 @@
   <!-- 6. Peer Comparison (teaser) -->
   <div class="report-section">
     <h2>6. Peer Comparison</h2>
-    <p>phi-4-mini-flash compared against similar models from the CLS Security Labs census of 270+ models.</p>
+    <p>phi-4-mini-instruct compared against models at similar breach rates from the CLS Security Labs census of 282+ models.</p>
     <div class="domain-row" style="margin-top: 1rem;">
       <span>Model</span><span>Breach Rate</span><span>Probes</span><span>Rank</span>
     </div>
     <div class="domain-row">
-      <span class="domain-name">phi-4-mini-flash</span>
-      <span class="domain-rate metric-critical">32.7%</span>
-      <span>450</span>
-      <span style="color: var(--text-secondary);">#187 / 270</span>
+      <span class="domain-name">Gemini 2.5 Flash Lite</span>
+      <span class="domain-rate metric-critical">57.4%</span>
+      <span>54</span>
+      <span style="color: var(--text-secondary);">#33</span>
+    </div>
+    <div class="domain-row" style="background: rgba(239,68,68,0.05);">
+      <span class="domain-name" style="color: #EF4444;">phi-4-mini-instruct</span>
+      <span class="domain-rate metric-critical">56.3%</span>
+      <span>1,877</span>
+      <span style="color: #EF4444; font-weight: 600;">&mdash;</span>
     </div>
     <div class="domain-row">
-      <span class="domain-name" style="color: var(--text-secondary);">Similar Model A</span>
-      <span class="domain-rate"><span class="redacted">--.--%</span></span>
-      <span><span class="redacted">---</span></span>
-      <span><span class="redacted">---</span></span>
+      <span class="domain-name">Llama-3.3-70B-Instruct</span>
+      <span class="domain-rate metric-high">55.5%</span>
+      <span>5,387</span>
+      <span style="color: var(--text-secondary);">#34</span>
     </div>
     <div class="domain-row">
-      <span class="domain-name" style="color: var(--text-secondary);">Similar Model B</span>
-      <span class="domain-rate"><span class="redacted">--.--%</span></span>
-      <span><span class="redacted">---</span></span>
-      <span><span class="redacted">---</span></span>
+      <span class="domain-name">Mistral Medium 3 Instruct</span>
+      <span class="domain-rate metric-high">55.6%</span>
+      <span>160</span>
+      <span style="color: var(--text-secondary);">#36</span>
     </div>
     <div class="domain-row">
-      <span class="domain-name" style="color: var(--text-secondary);">Category Average</span>
-      <span class="domain-rate"><span class="redacted">--.--%</span></span>
-      <span><span class="redacted">---</span></span>
+      <span class="domain-name" style="color: var(--text-muted); font-style: italic;">Field Average (282 models)</span>
+      <span class="domain-rate" style="color: var(--text-secondary);">~45%</span>
+      <span>&mdash;</span>
       <span>&mdash;</span>
     </div>
-    <p style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--text-muted); font-style: italic;">Full peer comparison with named models available in the purchased report.</p>
+    <p style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--text-muted); font-style: italic;">Full peer comparison across all 282 models with module-level breakdowns available in the purchased report.</p>
   </div>
 
   <!-- Final CTA -->
