@@ -444,16 +444,16 @@ function openModel(name) {
         <button class="btn btn-outline" style="font-size:0.8rem;padding:8px 16px" onclick="scrollToCapture()">Get Snapshot</button>
       </div>
       <div class="upgrade-card">
-        <div class="price-label">Detailed</div>
-        <div class="price">$99</div>
-        <div class="desc">Category Breakdown — 5 pages, every attack category</div>
-        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="#" onclick="buyReport('${esc(e.model)}',99)">Buy Report</a>
+        <div class="price-label">Model Breakdown</div>
+        <div class="price">$149</div>
+        <div class="desc">Breach rates, severity-ranked findings, compliance mapping</div>
+        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="https://buy.stripe.com/6oU28s4uT6pm8ojegX8Vi00" target="_blank">Buy Report</a>
       </div>
       <div class="upgrade-card">
-        <div class="price-label">Intelligence</div>
+        <div class="price-label">Intelligence Report</div>
         <div class="price">$499</div>
-        <div class="desc">Full Report — 20 pages, AIS scores, compliance mapping</div>
-        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="#" onclick="buyReport('${esc(e.model)}',499)">Buy Report</a>
+        <div class="desc">Full assessment, remediation roadmap, NIST/OWASP/MITRE mapping</div>
+        <a class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px" href="https://buy.stripe.com/00wdRa2mL296awr8WD8Vi01" target="_blank">Buy Report</a>
       </div>
     </div>
   </div>`;
@@ -524,13 +524,9 @@ async function submitCapture() {
   document.querySelector('.capture-form').style.display = 'none';
 }
 
-function buyReport(model, price) {
-  // TODO: Redirect to Stripe checkout
-  // For now, redirect to services page
-  // When Stripe is ready:
-  // window.location.href = `https://checkout.stripe.com/...?model=${encodeURIComponent(model)}&tier=${price}`;
-  alert(`Report purchase: ${model} — $${price}\n\nStripe integration coming soon. Contact brandon@clsecuritylabs.com for reports.`);
-}
+// buyReport() removed — buttons now link directly to Stripe checkout URLs
+// $149 Model Breakdown: buy.stripe.com/6oU28s4uT6pm8ojegX8Vi00
+// $499 Intelligence Report: buy.stripe.com/00wdRa2mL296awr8WD8Vi01
 
 // ── Sort handler ──
 document.addEventListener('DOMContentLoaded', () => {
