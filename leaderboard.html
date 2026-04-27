@@ -510,18 +510,30 @@ async function submitCapture() {
   btn.textContent = 'Sending...';
 
   try {
-    await fetch('https://script.google.com/macros/s/AKfycbwkbPEhTOnjQumVuRoEoHhOS0-T5wXI_z9mCp54-sHEmO9_T2I995CLTGMv-0VcI4lWOw/exec', {
+    const resp = await fetch('https://assess-api-945198539140.us-east1.run.app/api/snapshot', {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ email, model, source: 'leaderboard', type: 'snapshot' })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, model, source: 'leaderboard' })
     });
+    const data = await resp.json();
+    if (data.status === 'sent') {
+      document.getElementById('capture-success').textContent = `Snapshot for ${data.model} sent to ${email}!`;
+    } else {
+      document.getElementById('capture-success').textContent = data.message || 'Snapshot request received.';
+    }
   } catch (e) {
-    console.warn('Form submit error (may still succeed with no-cors):', e);
+    console.warn('Snapshot request error:', e);
+    document.getElementById('capture-success').textContent = 'Request received. Check your email shortly.';
   }
 
+  // Show success message, then reset form after 4 seconds so they can request another
   document.getElementById('capture-success').style.display = 'block';
-  document.querySelector('.capture-form').style.display = 'none';
+  btn.disabled = false;
+  btn.textContent = 'Get Snapshot';
+  document.getElementById('capture-email').value = '';
+  setTimeout(() => {
+    document.getElementById('capture-success').style.display = 'none';
+  }, 4000);
 }
 
 // buyReport() removed — buttons now link directly to Stripe checkout URLs
